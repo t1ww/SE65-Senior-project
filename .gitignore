@@ -1,0 +1,19 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# TypeScript build files
+dist/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.test
+
+# Logs
+logs/
+*.log
+log/
