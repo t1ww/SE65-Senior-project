@@ -4,7 +4,10 @@ services:
     image: mysql:latest
     container_name: mysql-container
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD} # Uses the password from .env
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     networks:
       - my-senior-project-network
     ports:
@@ -15,9 +18,13 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
+    restart: always
+    depends_on:
+      - mysql
     environment:
-      PMA_HOST: ${PMA_HOST}  # Uses the hostname from .env
-      PMA_PORT: ${PMA_PORT}  # Uses the port from .env
+      PMA_HOST: mysql
+      PMA_PORT: ${PMA_PORT}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     networks:
       - my-senior-project-network
     ports:
