@@ -1,20 +1,19 @@
 <script setup lang="ts">
-  // code here
 </script>
+
 <template>
     <p>
     Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
+    <a href="https://www.cmu.ac.th" target="_blank">
+      CMU
+    </a>: <strong>Chiang Mai University</strong> official website.
   </p>
   <p>
-    Learn more about IDE Support for Vue in the
+    or, Learn more about 
     <a
-      href="https://vuejs.org/guide/scaling-up/tooling.html#ide-support"
+      href="https://www.camt.cmu.ac.th"
       target="_blank"
-      >Vue Docs Scaling up Guide</a
+      >CAMT</a
     >.
   </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
 </template>

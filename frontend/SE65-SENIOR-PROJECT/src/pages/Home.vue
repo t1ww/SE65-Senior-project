@@ -2,20 +2,14 @@
   import Counter from "@/components/Counter.vue"
   import Footer from "@/components/Footer.vue"
 
-  defineProps<{ msg: string }>()
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1>Learn C++ today</h1>
+  
+  <Counter/>
 
- <Counter>
-  
- </Counter>
- <Footer>
-  
- </Footer>
-
-  
+  <Footer/>
 </template>
 
 <style scoped>
