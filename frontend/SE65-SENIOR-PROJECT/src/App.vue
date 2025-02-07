@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import HelloWorld from "./page/HelloWorld.vue";
+  import HelloWorld from "./page/HelloWorld.vue";
 </script>
 
 <template>

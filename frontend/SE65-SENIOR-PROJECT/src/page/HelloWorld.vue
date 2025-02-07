@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import Counter from "../components/Counter.vue"
-import Footer from "../components/Footer.vue"
+  import Counter from "@/components/Counter.vue"
+  import Footer from "@/components/Footer.vue"
 
-defineProps<{ msg: string }>()
-
-
+  defineProps<{ msg: string }>()
 </script>
 
 <template>
