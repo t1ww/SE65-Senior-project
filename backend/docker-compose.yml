@@ -1,39 +1,32 @@
-version: '3'
+version: '3.8'
+
 services:
   mysql:
     image: mysql:latest
-    container_name: mysql-container
+    container_name: mysql_container
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    networks:
-      - my-senior-project-network
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
     ports:
       - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_container
     restart: always
-    depends_on:
-      - mysql
     environment:
       PMA_HOST: mysql
-      PMA_PORT: ${PMA_PORT}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-    networks:
-      - my-senior-project-network
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root_password
     ports:
-      - "9000:80"
-
-networks:
-  my-senior-project-network:
-    driver: bridge
+      - "8080:80"
+    depends_on:
+      - mysql
 
 volumes:
-  mysql-data:
-    driver: local
+  mysql_data:
