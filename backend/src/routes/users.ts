@@ -1,12 +1,16 @@
-import { Router } from "express";
-import pool from "../database";
+import { Router, Request, Response } from "express";
+import { authenticateToken, AuthRequest } from "@/authMiddleware";
+import pool from "@/database";
 import bcrypt from "bcrypt";
-import { Interface } from "readline";
+import jwt, { SignOptions } from "jsonwebtoken";
+import dotenv from "dotenv";
+import ms from "ms";
 
 const router = Router();
+dotenv.config();
 
-// Get all users
-router.get("/", async (req, res) => {
+// Get all users (for testing purposes)
+router.get("/", async (req: Request, res: Response): Promise<any> => {
   try {
     const [rows] = await pool.query("SELECT * FROM users");
     res.json(rows);
@@ -15,8 +19,12 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/profile", authenticateToken, (req: AuthRequest, res) => {
+  res.json({ message: "Profile data", user: req.user });
+});
+
 // Add a new user
-router.post("/register", async (req, res) => {
+router.post("/register", async (req: Request, res: Response): Promise<any> => {
   const { name, email, password } = req.body;
   try {
     // Hash the password before saving
@@ -28,12 +36,68 @@ router.post("/register", async (req, res) => {
     );
 
     res.status(201).json({ id: (result as any).insertId, name, email });
-    } catch (err) {
-      const error = err as { message: string };  // Type assertion
-      console.error("Database Error:", error.message);
-      res.status(500).json({ error: "Failed to add user", details: error.message });
+  } catch (err) {
+    const error = err as { message: string };
+    console.error("Database Error:", error.message);
+    res.status(500).json({ error: "Failed to add user", details: error.message });
+  }
+});
+
+// Login route
+router.post("/login", async (req: Request, res: Response): Promise<any> => {
+  const { email, password } = req.body;
+
+  try {
+    // Query user by email
+    const [rows]: any = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
+    if (rows.length === 0) {
+      return res.status(400).json({ error: "User not found" });
     }
-    
+    const user = rows[0];
+
+    // Compare password with stored hash
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(400).json({ error: "Invalid credentials" });
+    }
+
+    // Generate JWT Token
+    const secretKey = process.env.JWT_SECRET;
+    const expiresInEnv = process.env.JWT_EXPIRES_IN;
+    if (!secretKey) {
+      return res.status(500).json({ error: "Missing JWT_SECRET in environment variables" });
+    }
+
+    // Ensure we have a valid expiresIn value by providing a fallback ("1h")
+    const expiresInValue: ms.StringValue = (expiresInEnv || "1h") as ms.StringValue;
+    // Convert expiresInValue to milliseconds using ms
+    const expiresInMs = ms(expiresInValue);
+    if (typeof expiresInMs !== "number") {
+      return res.status(500).json({ error: "Invalid expiresIn value" });
+    }
+
+    // Define SignOptions with expiresIn
+    const signOptions: SignOptions = { expiresIn: expiresInMs };
+
+    const token = jwt.sign(
+      { userId: user.id, name: user.name, email: user.email }, // Payload
+      secretKey, // Secret key
+      signOptions // Sign options
+    );
+
+    // Respond with the token and user details
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      userId: user.id,
+      name: user.name,
+      email: user.email
+    });
+
+  } catch (err) {
+    console.error("Database Error:", (err as any).message);
+    return res.status(500).json({ error: "Login failed", details: (err as any).message });
+  }
 });
 
 export default router;
