@@ -38,7 +38,11 @@ const handleLogin = async () => {
         <input type="password" id="password" v-model="password" required />
       </div>
       <button type="submit" :disabled="loading">{{ loading ? "Logging in..." : "Login" }}</button>
+      <div class="forget">
+        <p>forget password</p>
+      </div>
       <p v-if="error" class="error">{{ error }}</p>
+
     </form>
   </div>
 </template>
