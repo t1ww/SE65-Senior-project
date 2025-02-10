@@ -1,11 +1,25 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
 
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
 const error = ref("");
+const handleLogin = async () => {
+  loading.value = true;
+  error.value = "";
+  try {
+    await authStore.login(email.value, password.value);
+    router.push("/home");
+  } catch (err: any) {
+    error.value = err.message || "Invalid login credentials";
+  } finally {
+    loading.value = false;
+  }
+};
 
 
 
@@ -14,7 +28,7 @@ const error = ref("");
 <template>
     <div class="login-container">
     <h2>Login</h2>
-    <form>
+    <form @submit.prevent="handleLogin">
       <div class="input-group">
         <label for="email">Email</label>
         <input type="email" id="email" v-model="email" required />
