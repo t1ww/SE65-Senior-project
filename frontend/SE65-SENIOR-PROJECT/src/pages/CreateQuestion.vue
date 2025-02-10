@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+
+const router = useRouter();
 const name = ref('');
 const detail = ref('');
 const goal = ref('');
@@ -17,29 +20,30 @@ const submitQuestion = () => {
         <h2>Create Question</h2>
         <form @submit.prevent="submitQuestion">
             <div class="input-group">
-            <label for="name">Name:</label>
-            <input id="name" v-model="name" type="text" required />
-        </div>
+                <label for="name">Name:</label>
+                <input id="name" v-model="name" type="text" required />
+            </div>
 
             <div class="input-group">
-            <label for="detail">Detail:</label>
-            <input id="detail" v-model="detail" required />
-        </div>
+                <label for="detail">Detail:</label>
+                <input id="detail" v-model="detail" required />
+            </div>
 
             <div class="input-group">
-            <label for="goal">Goal:</label>
-            <input id="goal" v-model="goal" required />
-        </div>
+                <label for="goal">Goal:</label>
+                <input id="goal" v-model="goal" required />
+            </div>
 
             <div class="input-group">
-            <label for="example">Example:</label>
-            <input id="example" v-model="example" required />
-        </div>
+                <label for="example">Example:</label>
+                <input id="example" v-model="example" required />
+            </div>
 
-        <div class="input-group">
-            <label for="testCase">Test Case:</label>
-            <input id="testCase" v-model="testCase" required />
-        </div>
+            <div class="input-group">
+                <label for="testCase">Test Case:</label>
+                <input id="testCase" v-model="testCase" required />
+                <router-link to="/view-question">View Test Case</router-link>
+            </div>
 
             <button type="submit">Submit</button>
         </form>
@@ -78,7 +82,7 @@ button:hover {
     background-color: #0056b3;
 }
 .input-group {
-  margin-bottom: 15px;
-  text-align: left;
+    margin-bottom: 15px;
+    text-align: left;
 }
 </style>

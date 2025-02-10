@@ -43,6 +43,7 @@ onMounted(fetchQuestions);
     
     <p v-if="!loading && questions.length === 0">No questions available.</p>
   </div>
+
 </template>
 
 <style scoped>
