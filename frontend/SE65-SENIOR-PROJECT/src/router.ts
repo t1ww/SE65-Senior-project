@@ -14,7 +14,7 @@ const routes = [
   { name: 'Register', path: '/register', component: Register },
   { name: 'CreateQuestion', path: '/create-question', component: CreateQuestion },
   { name: 'ViewQuestion', path: '/view-question', component: ViewQuestion },
-  { name: 'ViewQuestion', path: '/view-question-list', component: ViewQuestionsList },
+  { name: 'ViewQuestionList', path: '/view-question-list', component: ViewQuestionsList },
 ];
 
 const router = createRouter({
