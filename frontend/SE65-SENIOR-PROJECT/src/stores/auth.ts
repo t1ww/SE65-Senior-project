@@ -9,20 +9,23 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login(email: string, password: string) {
       try {
-        const response = await axios.post("http://localhost:5000/api/users/login", {
-          email,
-          password
-        }, { withCredentials: true });
+        const response = await axios.post(
+          "http://localhost:5000/api/users/login",
+          {
+            email,
+            password,
+          },
+          { withCredentials: true }
+        );
 
-        // ✅ Fix: Use $patch to update state correctly
         this.$patch({
           user: response.data.user,
-          token: response.data.token
+          token: response.data.token,
         });
 
-        // ✅ Fix: Store token in localStorage properly
         localStorage.setItem("token", response.data.token);
       } catch (error) {
+        console.error("Login error:", error); // ✅ Log error for debugging
         throw new Error("Invalid credentials");
       }
     },

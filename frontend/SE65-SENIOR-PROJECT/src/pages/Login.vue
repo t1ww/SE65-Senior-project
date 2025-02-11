@@ -4,26 +4,26 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth.ts";
 
 const router = useRouter();
-
+const authStore = useAuthStore();
 
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
 const error = ref("");
+
 const handleLogin = async () => {
-  loading.value = true;
-  error.value = "";
-  try {
-    await authStore.login(email.value, password.value);
-    router.push("/home");
-  } catch (err: any) {
-    error.value = err.message || "Invalid login credentials";
-  } finally {
-    loading.value = false;
-  }
+   loading.value = true;
+   error.value = "";
+   try {
+     await authStore.login(email.value, password.value);
+     router.push("/home");
+   } catch (err) {
+     console.error("Login failed:", err);
+     error.value = err.message || "Invalid login credentials";
+   } finally {
+     loading.value = false;
+   }
 };
-
-
 
 </script>
 
