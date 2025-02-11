@@ -23,19 +23,21 @@ router.get("/profile", authenticateToken, (req: AuthRequest, res) => {
   res.json({ message: "Profile data", user: req.user });
 });
 
-// Add a new user
+// Add a new user (Register)
 router.post("/register", async (req: Request, res: Response): Promise<any> => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   try {
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
+    // Default role to "student" if not provided
+    const userRole = role || "student";
 
     const [result] = await pool.query(
-      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-      [name, email, hashedPassword]
+      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+      [name, email, hashedPassword, userRole]
     );
 
-    res.status(201).json({ id: (result as any).insertId, name, email });
+    res.status(201).json({ id: (result as any).insertId, name, email, role: userRole });
   } catch (err) {
     const error = err as { message: string };
     console.error("Database Error:", error.message);
@@ -68,30 +70,29 @@ router.post("/login", async (req: Request, res: Response): Promise<any> => {
       return res.status(500).json({ error: "Missing JWT_SECRET in environment variables" });
     }
 
-    // Ensure we have a valid expiresIn value by providing a fallback ("1h")
+    // Provide a fallback value ("1h") for expiresIn and convert it to milliseconds
     const expiresInValue: ms.StringValue = (expiresInEnv || "1h") as ms.StringValue;
-    // Convert expiresInValue to milliseconds using ms
     const expiresInMs = ms(expiresInValue);
     if (typeof expiresInMs !== "number") {
       return res.status(500).json({ error: "Invalid expiresIn value" });
     }
 
-    // Define SignOptions with expiresIn
     const signOptions: SignOptions = { expiresIn: expiresInMs };
 
+    // Include role in the token payload
     const token = jwt.sign(
-      { userId: user.id, name: user.name, email: user.email }, // Payload
-      secretKey, // Secret key
-      signOptions // Sign options
+      { userId: user.id, name: user.name, email: user.email, role: user.role },
+      secretKey,
+      signOptions
     );
 
-    // Respond with the token and user details
     res.status(200).json({
       message: "Login successful",
       token,
       userId: user.id,
       name: user.name,
-      email: user.email
+      email: user.email,
+      role: user.role
     });
 
   } catch (err) {
