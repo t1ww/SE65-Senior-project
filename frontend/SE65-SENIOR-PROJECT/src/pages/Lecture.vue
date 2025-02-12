@@ -14,7 +14,7 @@ const navigateTo = (path) => {
       <button @click="navigateTo('/upload-students')">Upload Students</button>
       <button @click="navigateTo('/view-students')">View Students</button>
       <button @click="navigateTo('/upload-question')">Upload Question</button>
-      <button @click="navigateTo('/view-questions')">View Questions</button>
+      <button @click="navigateTo('/view-question-list')">View Questions</button>
     </div>
   </div>
 </template>
