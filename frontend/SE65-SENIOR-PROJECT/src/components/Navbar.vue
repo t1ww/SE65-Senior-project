@@ -5,7 +5,7 @@
 
 <template>
   <nav class="navbar">
-    <div class="logo">MyLogo</div>
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/25/Chiang_mai_university_logo.png/225px-Chiang_mai_university_logo.png" class="logo">
     <ul class="nav-links">
       <li v-for="item in filteredRoutes" :key="item.path">
         <router-link :to="item.path">
@@ -40,8 +40,9 @@
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }
 
 .nav-links {
