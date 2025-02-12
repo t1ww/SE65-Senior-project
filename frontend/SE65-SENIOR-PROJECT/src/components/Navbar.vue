@@ -5,7 +5,9 @@
 
 <template>
   <nav class="navbar">
-    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/25/Chiang_mai_university_logo.png/225px-Chiang_mai_university_logo.png" class="logo">
+    <router-link to="/">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/25/Chiang_mai_university_logo.png/225px-Chiang_mai_university_logo.png" class="logo" to="/view-question">
+    </router-link>
     <ul class="nav-links">
       <li v-for="item in filteredRoutes" :key="item.path">
         <router-link :to="item.path">
