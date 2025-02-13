@@ -25,6 +25,10 @@ Everything has been setup in `docker-compose.yml`
 ## To start back-end
 
       cd backend
+
+      npm install
+      npx knex migrate:latest
+
       npm run dev
 
 ## To start front-end

@@ -1,30 +1,32 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth.ts";
+import { ref } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
-const authStore = useAuthStore();
+const email = ref('')
+const password = ref('')
+const loading = ref(false)
+const error = ref('')
 
-const email = ref("");
-const password = ref("");
-const loading = ref(false);
-const error = ref("");
+const router = useRouter()
 
 const handleLogin = async () => {
-   loading.value = true;
-   error.value = "";
-   try {
-     await authStore.login(email.value, password.value);
-     router.push("/home");
-   } catch (err) {
-     console.error("Login failed:", err);
-     error.value = err.message || "Invalid login credentials";
-   } finally {
-     loading.value = false;
-   }
-};
+  error.value = ''
+  loading.value = true
 
+  try {
+    const { data } = await axios.post('/login', {
+      email: email.value,
+      password: password.value
+    })
+    localStorage.setItem('token', data.token)
+    router.push({ name: 'Dashboard' })
+  } catch (err: any) {
+    error.value = err.response?.data?.error || 'Login failed. Please try again.'
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>

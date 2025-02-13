@@ -12,7 +12,7 @@ const fetchQuestions = async () => {
   loading.value = true;
   error.value = "";
   try {
-    const response = await axios.get("http://localhost:5000/api/questions");
+    const response = await axios.get("http://localhost:5000/questions");
     questions.value = response.data;
   } catch (err) {
     error.value = "Failed to fetch questions";
