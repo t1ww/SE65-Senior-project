@@ -13,15 +13,18 @@ const router = useRouter()
 const handleLogin = async () => {
   error.value = ''
   loading.value = true
+  console.log("Logging in")
 
   try {
-    const { data } = await axios.post('/login', {
+    const { data } = await axios.post('/users/login', {
       email: email.value,
       password: password.value
     })
+    console.log(data)
     localStorage.setItem('token', data.token)
-    router.push({ name: 'Dashboard' })
+    router.push({ path: "/" })
   } catch (err: any) {
+    console.error(err)
     error.value = err.response?.data?.error || 'Login failed. Please try again.'
   } finally {
     loading.value = false
@@ -30,7 +33,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-    <div class="login-container">
+  <div class="login-container">
     <h2>Login</h2>
     <form @submit.prevent="handleLogin">
       <div class="input-group">
@@ -59,20 +62,24 @@ const handleLogin = async () => {
   padding: 50px;
   text-align: center;
 }
+
 .input-group {
   margin-bottom: 15px;
   text-align: left;
 }
+
 label {
   display: block;
   font-weight: bold;
 }
+
 input {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 button {
   width: 100%;
   padding: 10px;
@@ -82,10 +89,12 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+
 button:disabled {
   background-color: #aaa;
   cursor: not-allowed;
 }
+
 .error {
   color: red;
   margin-top: 10px;
