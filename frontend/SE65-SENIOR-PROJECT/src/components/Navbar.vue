@@ -1,15 +1,32 @@
 <script setup lang="ts">
-  import router from "@/router";
-  const filteredRoutes = router.getRoutes().filter(route => route.path !== '/view-question');
+import router from "@/router";
+import { computed } from 'vue'
+const filteredRoutes = computed(() => {
+  const routes = router.getRoutes()
+  return routes.filter(route => {
+    if (route.requiresAuth && !isLoggedIn()) {
+      return false; // Exclude routes that require authentication if the user is not logged in
+    }
+    if (route.role && route.role !== getUserRole()) {
+      return false; // Exclude routes that require a specific role
+    }
+
+    return true; // Keep route if it passes all conditions
+  })
+})
 </script>
 
 <template>
   <nav class="navbar">
     <router-link to="/">
-    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/25/Chiang_mai_university_logo.png/225px-Chiang_mai_university_logo.png" class="logo" to="/view-question">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/en/thumb/2/25/Chiang_mai_university_logo.png/225px-Chiang_mai_university_logo.png"
+        class="logo" to="/view-question">
     </router-link>
     <ul class="nav-links">
       <li v-for="item in filteredRoutes" :key="item.path">
+
+
         <router-link :to="item.path">
           <div :class="{ 'green-text': item.path === $route.path }">
             {{ item.name }}

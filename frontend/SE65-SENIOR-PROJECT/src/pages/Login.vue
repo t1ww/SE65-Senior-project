@@ -13,7 +13,7 @@ const router = useRouter()
 const handleLogin = async () => {
   error.value = ''
   loading.value = true
-  console.log("Logging in")
+  console.log("Logging in..")
 
   try {
     const { data } = await axios.post('/users/login', {
@@ -21,7 +21,14 @@ const handleLogin = async () => {
       password: password.value
     })
     console.log(data)
-    localStorage.setItem('token', data.token)
+    // Saving user's data
+    localStorage.setItem('user_token', data.token)
+    localStorage.setItem('user_id', data.id)
+    localStorage.setItem('user_name', data.name)
+    localStorage.setItem('user_email', data.email)
+    localStorage.setItem('user_role', data.role)
+    // push to home page
+    console.log('Logged in successfully!')
     router.push({ path: "/" })
   } catch (err: any) {
     console.error(err)
