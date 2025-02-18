@@ -41,31 +41,21 @@ const prevPage = () => {
 
     <h3>Test Cases:</h3>
 
-    <ul class="test-case-list">
-      <li v-for="(testCase, index) in paginatedTestCases" :key="index" class="test-case-item">
-        <strong>Test case {{ currentPage * itemsPerPage + index + 1 }}</strong><br>
-
-        <div class="input-group">
-          <label for="input">Input:</label>
-          <textarea 
-            v-model="testCase.input" 
-            @input="updateTestCase(index, 'input', testCase.input)"
-            placeholder="Enter test case input"
-          ></textarea>
+    <div class="test-case-list">
+      <div v-for="(testCase, index) in paginatedTestCases" :key="index" class="test-case-item">
+        <div class="test-case-header">
+          <strong>Test Case {{ currentPage * itemsPerPage + index + 1 }}</strong>
         </div>
-
         <div class="input-group">
-          <label for="output">Output:</label>
-          <textarea 
-            v-model="testCase.output" 
-            @input="updateTestCase(index, 'output', testCase.output)"
-            placeholder="Enter expected output"
-          ></textarea>
+          <label>Input:</label>
+          <textarea v-model="testCase.input" placeholder="Enter test case input"></textarea>
         </div>
-
-        <hr />
-      </li>
-    </ul>
+        <div class="input-group">
+          <label>Output:</label>
+          <textarea v-model="testCase.output" placeholder="Enter expected output"></textarea>
+        </div>
+      </div>
+    </div>
 
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 0">⬅ Previous</button>
@@ -76,15 +66,16 @@ const prevPage = () => {
 
 <style scoped>
 .container {
-  float: left;
-  max-width: 100%;
-  margin-left: 20px;
+  max-width: 600px;
+  margin: 0 auto;
   padding: 20px;
-  text-align: left;
+ 
+  text-align: center;
 }
 
 .back-button {
   margin-bottom: 15px;
+  text-align: left;
 }
 
 .back-button a {
@@ -98,44 +89,54 @@ const prevPage = () => {
 }
 
 h3 {
-  color: purple;
-  text-align: left;
+  color: #9c33ff;
+  text-align: center;
   margin-bottom: 15px;
 }
 
 .test-case-list {
+  color: black-;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  align-items: flex-start;
-  color: black;
+  align-items: center;
 }
 
 .test-case-item {
   width: 100%;
-  padding: 10px;
+  max-width: 500px;
+  padding: 15px;
   border-left: 5px solid #007bff;
-  background: white;
+  background: rgb(236, 203, 255);
   border-radius: 6px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: left;
+  text-align: center;
 }
 
-.test-case-header {
-  font-size: 1rem;
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.input-group label {
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.test-case-content {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+textarea {
+  width: 100%;
+  max-width: 400px;
+  min-height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  text-align: center;
 }
 
 .pagination {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   margin-top: 20px;
 }
 
@@ -149,7 +150,7 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: 0.3s;
-  margin-right: 10px;
+  margin: 5px;
 }
 
 button:hover {
