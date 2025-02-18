@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useRouter, type RouteLocationAsPathGeneric, type RouteLocationAsRelativeGeneric } from 'vue-router';
 const router = useRouter();
 
-const navigateTo = (path) => {
+const navigateTo = (path: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric) => {
   router.push(path);
 };
 </script>
