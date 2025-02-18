@@ -1,20 +1,31 @@
 <script setup lang="ts">
 import router from "@/router";
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
+
+// Inject the functions with fallback defaults
+const isLoggedIn = inject<() => boolean>('isLoggedIn', () => false);
+const getUserData = inject<() => any>('getUserData', () => ({}));
+
 const filteredRoutes = computed(() => {
-  const routes = router.getRoutes()
-  return routes.filter(route => {
-    if (route.requiresAuth && !isLoggedIn()) {
-      return false; // Exclude routes that require authentication if the user is not logged in
-    }
-    if (route.role && route.role !== getUserRole()) {
-      return false; // Exclude routes that require a specific role
+  return router.getRoutes().filter(route => {
+    // Exclude if hidden
+    if (route.meta?.hidden) return false;
+
+    // Exclude if route requires authentication and user isn't logged in
+    if (route.meta?.requiresAuth && !isLoggedIn()) return false;
+
+    // Exclude if route requires specific roles and current user's role isn't allowed
+    const userRole = getUserData()?.role || '';  // Ensure userRole is always a string
+    if (route.meta?.allowedRoles?.length && !route.meta.allowedRoles.includes(userRole)) {
+      return false;
     }
 
-    return true; // Keep route if it passes all conditions
-  })
-})
+    return true;
+  });
+});
 </script>
+
+
 
 <template>
   <nav class="navbar">

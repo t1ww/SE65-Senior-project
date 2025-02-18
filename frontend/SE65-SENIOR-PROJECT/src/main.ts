@@ -12,12 +12,12 @@ import { isLoggedIn, getUserData } from './utils'
 axios.defaults.baseURL = 'http://localhost:5000'
 
 const app = createApp(App)
-// GET userData
-app.config.globalProperties.$isLoggedIn = isLoggedIn
-app.config.globalProperties.$getUserData = getUserData
+
+// Provide functions instead of using globalProperties
+app.provide('isLoggedIn', isLoggedIn)
+app.provide('getUserData', getUserData)
 
 app.use(createPinia())
-.use(router)
-.provide('axios', axios)
-.mount('#app')
-
+    .use(router)
+    .provide('axios', axios)
+    .mount('#app')
