@@ -7,6 +7,7 @@ import CreateQuestion from '@/pages/CreateQuestion.vue';
 import ViewQuestion from '@/pages/ViewQuestion.vue';
 import ViewQuestionsList from './pages/ViewQuestionsList.vue';
 import Lecture from './pages/Lecture.vue'
+import TestCase from './pages/TestCase.vue'
 
 const routes = [
   { name: 'Home', path: '/', component: Home },
@@ -17,6 +18,7 @@ const routes = [
   { name: 'ViewQuestion', path: '/view-question', component: ViewQuestion },
   { name: 'ViewQuestionList', path: '/view-question-list', component: ViewQuestionsList },
   {name: 'Lecture',path:'/lecture',component:Lecture},
+  {name: 'TestCase',path:'/test-case',component:TestCase},
 ];
 
 const router = createRouter({
