@@ -4,6 +4,13 @@ import { exec } from "child_process";
 import fs from "fs";
 import path from "path";
 
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+// Get current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app = express();
 const PORT = 3000;
 
