@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
+// Initialize test cases as an empty array
 const questionData = ref({
   testCases: [
-    { input: "", output: "" },
-    { input: "", output: "" },
-    { input: "", output: "" },
-    { input: "", output: "" },
-    { input: "", output: "" }
+    // You can start with an empty array or add a default test case if needed
   ]
 });
 
@@ -29,6 +26,16 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 0) {
     currentPage.value--;
+  }
+};
+
+// Function to add a new test case
+const addTestCase = () => {
+  questionData.value.testCases.push({ input: "", output: "" });
+
+  // Check if the new test case exceeds the current page limit and move to the next page if needed
+  if (questionData.value.testCases.length > (currentPage.value + 1) * itemsPerPage) {
+    currentPage.value++;
   }
 };
 </script>
@@ -57,6 +64,11 @@ const prevPage = () => {
       </div>
     </div>
 
+    <!-- Add Test Case button -->
+    <div class="add-button">
+      <button @click="addTestCase">Add Test Case</button>
+    </div>
+
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 0">⬅ Previous</button>
       <button @click="nextPage" :disabled="(currentPage + 1) * itemsPerPage >= questionData.testCases.length">Next ➡</button>
@@ -69,7 +81,6 @@ const prevPage = () => {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
- 
   text-align: center;
 }
 
@@ -95,7 +106,7 @@ h3 {
 }
 
 .test-case-list {
-  color: black-;
+  color: black;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -132,6 +143,10 @@ textarea {
   border-radius: 4px;
   padding: 5px;
   text-align: center;
+}
+
+.add-button {
+  margin-top: 20px;
 }
 
 .pagination {
