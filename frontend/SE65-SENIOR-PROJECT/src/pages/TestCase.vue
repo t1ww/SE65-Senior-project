@@ -3,11 +3,11 @@ import { ref, computed } from "vue";
 
 const questionData = ref({
   testCases: [
-    { input: "1 2", output: "3" },
-    { input: "5 7", output: "12" },
-    { input: "10 20", output: "30" },
-    { input: "100 200", output: "300" },
-    { input: "3 3", output: "6" }
+    { input: "", output: "" },
+    { input: "", output: "" },
+    { input: "", output: "" },
+    { input: "", output: "" },
+    { input: "", output: "" }
   ]
 });
 
@@ -41,17 +41,31 @@ const prevPage = () => {
 
     <h3>Test Cases:</h3>
 
-    <div class="test-case-list">
-      <div v-for="(testCase, index) in paginatedTestCases" :key="index" class="test-case-item">
-        <div class="test-case-header">
-          <strong>Test Case {{ currentPage * itemsPerPage + index + 1 }}</strong>
+    <ul class="test-case-list">
+      <li v-for="(testCase, index) in paginatedTestCases" :key="index" class="test-case-item">
+        <strong>Test case {{ currentPage * itemsPerPage + index + 1 }}</strong><br>
+
+        <div class="input-group">
+          <label for="input">Input:</label>
+          <textarea 
+            v-model="testCase.input" 
+            @input="updateTestCase(index, 'input', testCase.input)"
+            placeholder="Enter test case input"
+          ></textarea>
         </div>
-        <div class="test-case-content">
-          <span><strong>Input:</strong> {{ testCase.input }}</span>
-          <span><strong>Output:</strong> {{ testCase.output }}</span>
+
+        <div class="input-group">
+          <label for="output">Output:</label>
+          <textarea 
+            v-model="testCase.output" 
+            @input="updateTestCase(index, 'output', testCase.output)"
+            placeholder="Enter expected output"
+          ></textarea>
         </div>
-      </div>
-    </div>
+
+        <hr />
+      </li>
+    </ul>
 
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 0">⬅ Previous</button>
@@ -84,7 +98,7 @@ const prevPage = () => {
 }
 
 h3 {
-  color: #d70cff;
+  color: purple;
   text-align: left;
   margin-bottom: 15px;
 }
@@ -94,13 +108,14 @@ h3 {
   flex-direction: column;
   gap: 15px;
   align-items: flex-start;
+  color: black;
 }
 
 .test-case-item {
   width: 100%;
   padding: 10px;
   border-left: 5px solid #007bff;
-  background: rgb(0, 0, 0);
+  background: white;
   border-radius: 6px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   text-align: left;
