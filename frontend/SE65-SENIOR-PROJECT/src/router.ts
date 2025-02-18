@@ -19,11 +19,8 @@ const routes = [
   { name: 'CreateQuestion', path: '/create-question', component: CreateQuestion },
   { name: 'ViewQuestion', path: '/view-question', component: ViewQuestion, meta: { hidden: true } },
   { name: 'ViewQuestionList', path: '/view-question-list', component: ViewQuestionsList },
-    name: 'Lecture',
-    path: '/lecture',
-    component: Lecture,
-    meta: { requiresAuth: true, allowedRoles: ['professor'] },
-    {name: 'TestCase',path:'/test-case',component:TestCase},
+  { name: 'Lecture', path: '/lecture', component: Lecture, meta: { requiresAuth: true, allowedRoles: ['professor'] } },
+  { name: 'TestCase',path:'/test-case',component:TestCase},
 
 ];
 
