@@ -133,3 +133,75 @@ Everything has been setup in `docker-compose.yml`
 - **Response:** A success message or status confirming deletion.
 
 </details>
+
+---
+
+# ts-code-runner
+
+### Make sure you have
+- **Node.js** v20.x (or later) and **npm**
+- **g++** (GNU C++ compiler)
+
+Check `g++` by running
+
+    g++ -v
+
+if `no` do the following
+
+  - **Windows:** Install MinGW-w64 and add its `bin` folder to your PATH (follow the manual)
+  - **Linux:** Install `build-essential` (e.g. `sudo apt-get install build-essential`)
+  - **macOS:** Install Xcode Command Line Tools (`xcode-select --install`)
+
+After that you should be able to start the server with
+
+    npm run dev
+
+Here's the example payload json request
+
+    {
+        "code": "#include <iostream>\nusing namespace std;\nint main() { int x; cin >> x; cout << x * 2; return 0; }",
+        "testCases": [
+            { "input": "5", "expectedOutput": "10" },
+            { "input": "10", "expectedOutput": "20" },
+            { "input": "0", "expectedOutput": "0" },
+            { "input": "-3", "expectedOutput": "-6" },
+            { "input": "100", "expectedOutput": "200" }
+        ]
+    }
+
+You should get this response
+
+    {
+        "results": [
+            {
+                "input": "5",
+                "output": "10",
+                "expected": "10",
+                "passed": true
+            },
+            {
+                "input": "10",
+                "output": "20",
+                "expected": "20",
+                "passed": true
+            },
+            {
+                "input": "0",
+                "output": "0",
+                "expected": "0",
+                "passed": true
+            },
+            {
+                "input": "-3",
+                "output": "-6",
+                "expected": "-6",
+                "passed": true
+            },
+            {
+                "input": "100",
+                "output": "200",
+                "expected": "200",
+                "passed": true
+            }
+        ]
+    }
