@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+
 const name = ref('');
 const detail = ref('');
 const goal = ref('');
@@ -32,14 +33,12 @@ const submitQuestion = () => {
             </div>
 
             <div class="input-group">
-                <label for="example">Example:</label>
+                <label for="example">Example Output:</label>
                 <input id="example" v-model="example" required />
             </div>
 
             <div class="input-group">
-                <label for="testCase">Test Case:</label>
-                <input id="testCase" v-model="testCase" required />
-                <router-link to="/view-question">View Test Case</router-link>
+                <router-link to="/test-case">View Test Case</router-link>
             </div>
 
             <button type="submit">Submit</button>

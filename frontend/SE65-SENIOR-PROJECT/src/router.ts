@@ -5,8 +5,11 @@ import Login from '@/pages/Login.vue';
 import Register from '@/pages/Register.vue';
 import CreateQuestion from '@/pages/CreateQuestion.vue';
 import ViewQuestion from '@/pages/ViewQuestion.vue';
-import ViewQuestionsList from '@/pages/ViewQuestionsList.vue';
-import Lecture from '@/pages/Lecture.vue';
+
+import ViewQuestionsList from './pages/ViewQuestionsList.vue';
+import Lecture from './pages/Lecture.vue'
+import TestCase from './pages/TestCase.vue'
+
 
 const routes = [
   { name: 'Home', path: '/', component: Home },
@@ -16,12 +19,9 @@ const routes = [
   { name: 'CreateQuestion', path: '/create-question', component: CreateQuestion },
   { name: 'ViewQuestion', path: '/view-question', component: ViewQuestion, meta: { hidden: true } },
   { name: 'ViewQuestionList', path: '/view-question-list', component: ViewQuestionsList },
-  { 
-    name: 'Lecture',
-    path: '/lecture',
-    component: Lecture,
-    meta: { requiresAuth: true, allowedRoles: ['professor'] } 
-  },
+  { name: 'Lecture', path: '/lecture', component: Lecture, meta: { requiresAuth: true, allowedRoles: ['professor'] } },
+  { name: 'TestCase',path:'/test-case',component:TestCase ,meta: { hidden: true }},
+
 ];
 
 const router = createRouter({
