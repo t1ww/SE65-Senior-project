@@ -3,10 +3,12 @@ import { ref } from 'vue';
 
 
 const name = ref('');
-const detail = ref('');
-const goal = ref('');
-const example = ref('');
-const testCase = ref('');
+const description = ref('');
+const hint = ref('');
+const startingCode = ref('');
+const correctCode = ref('');
+const estimatedRuntime = ref('');
+const timeComplexity = ref('');
 
 const submitQuestion = () => {
     console.log({ name: name.value, detail: detail.value, goal: goal.value, example: example.value, testCase: testCase.value });
@@ -19,22 +21,37 @@ const submitQuestion = () => {
         <form @submit.prevent="submitQuestion">
             <div class="input-group">
                 <label for="name">Name:</label>
-                <input id="name" v-model="name" type="text" required />
+                <input v-model="name" type="text" required />
             </div>
 
             <div class="input-group">
-                <label for="detail">Detail:</label>
-                <input id="detail" v-model="detail" required />
+                <label for="description">Dscription:</label>
+                <input v-model="description" required />
             </div>
 
             <div class="input-group">
-                <label for="goal">Goal:</label>
-                <input id="goal" v-model="goal" required />
+                <label for="hint">Hint:</label>
+                <input v-model="hint" required />
             </div>
 
             <div class="input-group">
-                <label for="example">Example Output:</label>
-                <input id="example" v-model="example" required />
+                <label for="startingCode">Starting Code:</label>
+                <textarea v-model="startingCode" required />
+            </div>
+
+            <div class="input-group">
+                <label for="correctCode">Correct Answer Code:</label>
+                <textarea v-model="correctCode" required />
+            </div>
+
+            <div class="input-group">
+                <label for="estimatedRuntime">estimated Runtime:</label>
+                <input v-model="estimatedRuntime" required />
+            </div>
+
+            <div class="input-group">
+                <label for="timeComplexity">Time Complexity:</label>
+                <input v-model="timeComplexity" required />
             </div>
 
             <div class="input-group">
@@ -81,4 +98,11 @@ button:hover {
     margin-bottom: 15px;
     text-align: left;
 }
+textarea {
+    width: 100%;
+    height: 100px; /* Set fixed height */
+    resize: none;  /* Prevent resizing */
+}
+
+
 </style>

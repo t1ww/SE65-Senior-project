@@ -126,7 +126,6 @@ h3 {
 .input-group {
   display: flex;
   flex-direction: column;
-  align-items: center;
   margin-top: 10px;
 }
 
@@ -142,7 +141,6 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 5px;
-  text-align: center;
 }
 
 .add-button {
@@ -175,5 +173,10 @@ button:hover {
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+textarea {
+    width: 100%;
+    height: 100px; /* Set fixed height */
+    resize: none;  /* Prevent resizing */
 }
 </style>
