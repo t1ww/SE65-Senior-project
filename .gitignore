@@ -17,3 +17,4 @@ dist/
 logs/
 *.log
 log/
+ts-code-runner/server.js

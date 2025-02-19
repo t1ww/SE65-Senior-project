@@ -1,47 +1,85 @@
-import express, { Request, Response } from "express";
-import bodyParser from "body-parser";
-import { exec } from "child_process";
-import fs from "fs";
+import express from "express";
+import fs from "fs-extra";
 import path from "path";
+import { exec, spawn } from "child_process";
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fileURLToPath } from "url";
 
-// Get current directory
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
+
 
 const app = express();
-const PORT = 3000;
+app.use(express.json());
 
-app.use(bodyParser.json());
+const TEMP_DIR = path.join(__dirname, "temp");
+fs.ensureDirSync(TEMP_DIR);
 
-// API endpoint to execute code
-app.post("/run", async (req: Request, res: Response): Promise<any> => {
-  const { code } = req.body;
-  if (!code) return res.status(400).json({ error: "No code provided" });
+app.post("/run", async (req, res): Promise<any> => {
+    const { code, testCases } = req.body;
 
-  // Generate a unique filename
-  const fileName = `code_${Date.now()}.ts`;
-  const filePath = path.join(__dirname, "sandbox", fileName);
-
-  // Save the code to a temporary TypeScript file
-  fs.writeFileSync(filePath, code);
-
-  // Run the code using Docker (sandboxed execution)
-  exec(
-    `docker run --rm -v ${filePath}:/app/script.ts node:18-alpine sh -c "cd /app && npx ts-node script.ts"`,
-    (error, stdout, stderr) => {
-      // Delete the file after execution
-      fs.unlinkSync(filePath);
-
-      if (error)
-        return res.status(500).json({ error: stderr || error.message });
-      res.json({ output: stdout.trim() });
+    if (!code || !Array.isArray(testCases)) {
+        return res.status(400).json({ error: "Invalid input" });
     }
-  );
+
+    const fileName = `temp_${Date.now()}`;
+    const cppFilePath = path.join(TEMP_DIR, `${fileName}.cpp`);
+    const exeFilePath = path.join(TEMP_DIR, fileName);
+
+    try {
+        // Save C++ code to file
+        await fs.writeFile(cppFilePath, code);
+
+        // Compile the C++ code
+        await new Promise((resolve, reject) => {
+            exec(`g++ "${cppFilePath}" -o "${exeFilePath}"`, (err, stdout, stderr) => {
+                if (err) return reject(stderr || err.message);
+                resolve(stdout);
+            });
+        });
+
+        const results = await Promise.all(
+            testCases.map(({ input, expectedOutput }: { input: string; expectedOutput: string }) => {
+                return new Promise<{ input: string; output: string; expected: string; passed: boolean }>((resolve) => {
+                    const child = spawn(exeFilePath, []);
+
+                    let output = "";
+                    child.stdout.on("data", (data: Buffer) => {
+                        output += data.toString();
+                    });
+
+                    child.stderr.on("data", (data: Buffer) => {
+                        console.error(`stderr: ${data.toString()}`);
+                    });
+
+                    child.on("close", () => {
+                        output = output.trim();
+                        resolve({
+                            input,
+                            output,
+                            expected: expectedOutput,
+                            passed: output === expectedOutput,
+                        });
+                    });
+
+                    // Write input to the child process via stdin
+                    if (child.stdin) {
+                        child.stdin.write(input);
+                        child.stdin.end();
+                    }
+                });
+            })
+        );
+
+        res.json({ results });
+
+    } catch (error: unknown) {
+        res.status(500).json({ error: (error as Error).toString() });
+    } finally {
+        // Cleanup
+        fs.remove(cppFilePath).catch(() => {});
+        fs.remove(exeFilePath).catch(() => {});
+    }
 });
 
-app.listen(PORT, () =>
-  console.log(`Server running at http://localhost:${PORT}`)
-);
+app.listen(3000, () => console.log("Server running on port 3000"));
