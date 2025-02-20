@@ -1,14 +1,33 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 
-// Initialize test cases as an empty array
+const loadTestCases = () => {
+  const storedTestCases = localStorage.getItem("testCases");
+  if (storedTestCases) {
+    const parsedCases = JSON.parse(storedTestCases);
+    return parsedCases.length > 0 ? parsedCases : [{ input: "", output: "" }];
+  }
+  return [{ input: "", output: "" }];
+};
+
+const saveTestCases = () => {
+  localStorage.setItem("testCases", JSON.stringify(questionData.value.testCases));
+};
+
+const saveCurrentPage = () => {
+  localStorage.setItem("currentPage", JSON.stringify(currentPage.value));
+};
+
+const loadCurrentPage = () => {
+  const storedPage = localStorage.getItem("currentPage");
+  return storedPage ? JSON.parse(storedPage) : 0;
+};
+
 const questionData = ref({
-  testCases: [
-    // You can start with an empty array or add a default test case if needed
-  ]
+  testCases: loadTestCases(),
 });
 
-const currentPage = ref(0);
+const currentPage = ref(loadCurrentPage());
 const itemsPerPage = 2;
 
 const paginatedTestCases = computed(() => {
@@ -20,25 +39,54 @@ const paginatedTestCases = computed(() => {
 const nextPage = () => {
   if ((currentPage.value + 1) * itemsPerPage < questionData.value.testCases.length) {
     currentPage.value++;
+    saveCurrentPage();
   }
 };
 
 const prevPage = () => {
   if (currentPage.value > 0) {
     currentPage.value--;
+    saveCurrentPage();
   }
 };
 
-// Function to add a new test case
 const addTestCase = () => {
   questionData.value.testCases.push({ input: "", output: "" });
+  saveTestCases();
 
-  // Check if the new test case exceeds the current page limit and move to the next page if needed
   if (questionData.value.testCases.length > (currentPage.value + 1) * itemsPerPage) {
     currentPage.value++;
+    saveCurrentPage();
   }
 };
+
+const deleteTestCase = (index: number) => {
+  const actualIndex = currentPage.value * itemsPerPage + index;
+  questionData.value.testCases.splice(actualIndex, 1);
+  saveTestCases();
+
+  if (currentPage.value > 0 && paginatedTestCases.value.length === 0) {
+    currentPage.value--;
+    saveCurrentPage();
+  }
+};
+
+watch(
+  () => questionData.value.testCases,
+  () => {
+    saveTestCases();
+  },
+  { deep: true }
+);
+
+onMounted(() => {
+  questionData.value.testCases = loadTestCases();
+  currentPage.value = 0; 
+  saveTestCases(); 
+});
+
 </script>
+
 
 <template>
   <div class="container">
@@ -52,19 +100,19 @@ const addTestCase = () => {
       <div v-for="(testCase, index) in paginatedTestCases" :key="index" class="test-case-item">
         <div class="test-case-header">
           <strong>Test Case {{ currentPage * itemsPerPage + index + 1 }}</strong>
+          <button @click="deleteTestCase(index)" class="delete-button">🗑 Delete</button>
         </div>
         <div class="input-group">
           <label>Input:</label>
-          <input v-model="testCase.input" placeholder="Enter test case input"></input>
+          <input v-model="testCase.input" placeholder="Enter test case input" />
         </div>
         <div class="input-group">
           <label>Output:</label>
-          <input v-model="testCase.output" placeholder="Enter expected output"></input>
+          <input v-model="testCase.output" placeholder="Enter expected output" />
         </div>
       </div>
     </div>
 
-    <!-- Add Test Case button -->
     <div class="add-button">
       <button @click="addTestCase">Add Test Case</button>
     </div>
@@ -75,6 +123,7 @@ const addTestCase = () => {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .container {
@@ -174,4 +223,20 @@ button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.delete-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.delete-button:hover {
+  background-color: #cc0000;
+}
+
 </style>
