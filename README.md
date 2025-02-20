@@ -22,6 +22,11 @@ Everything has been setup in `docker-compose.yml`
 
 ---
 
+## You can now `npm run full` in root folder
+to start both back-end and front-end servers
+
+---
+
 ## To start back-end
 
       cd backend

@@ -1,0 +1,20 @@
+{
+  "name": "se65-senior-project",
+  "version": "1.0.0",
+  "description": "CAMT SE65 `senior project` for my group",
+  "main": "index.js",
+  "scripts": {
+    "full": "start cmd /k \"npm run dev --prefix backend\" && start cmd /k \"npm run dev --prefix frontend/SE65-SENIOR-PROJECT\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t1ww/SE65-Senior-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/t1ww/SE65-Senior-project/issues"
+  },
+  "homepage": "https://github.com/t1ww/SE65-Senior-project#readme"
+}
