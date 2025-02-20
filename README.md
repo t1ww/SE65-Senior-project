@@ -22,8 +22,25 @@ Everything has been setup in `docker-compose.yml`
 
 ---
 
-## You can now `npm run full` in root folder
-to start both back-end and front-end servers
+## You can now `npm run dev` in root folder1
+to run both front-end and back-end servers
+
+## You can also calls
+`to run frontend`
+
+    npm run fe 
+
+or alternatively
+
+    npm run frontend 
+
+`to run backend`
+
+    npm run be 
+
+or alternatively
+
+    npm run backend 
 
 ---
 

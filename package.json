@@ -4,7 +4,11 @@
   "description": "CAMT SE65 `senior project` for my group",
   "main": "index.js",
   "scripts": {
-    "full": "start cmd /k \"npm run dev --prefix backend\" && start cmd /k \"npm run dev --prefix frontend/SE65-SENIOR-PROJECT\""
+    "be": "npm run dev --prefix backend",
+    "fe": "npm run dev --prefix frontend/SE65-SENIOR-PROJECT",
+    "backend": "npm run be",
+    "frontend": "npm run fe",
+    "dev": "start cmd /k \"npm run be\" && start cmd /k \"npm run fe\""
   },
   "repository": {
     "type": "git",
