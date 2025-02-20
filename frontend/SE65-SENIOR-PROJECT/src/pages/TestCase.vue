@@ -55,11 +55,11 @@ const addTestCase = () => {
         </div>
         <div class="input-group">
           <label>Input:</label>
-          <textarea v-model="testCase.input" placeholder="Enter test case input"></textarea>
+          <input v-model="testCase.input" placeholder="Enter test case input"></input>
         </div>
         <div class="input-group">
           <label>Output:</label>
-          <textarea v-model="testCase.output" placeholder="Enter expected output"></textarea>
+          <input v-model="testCase.output" placeholder="Enter expected output"></input>
         </div>
       </div>
     </div>
@@ -173,10 +173,5 @@ button:hover {
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-}
-textarea {
-    width: 100%;
-    height: 100px; /* Set fixed height */
-    resize: none;  /* Prevent resizing */
 }
 </style>
