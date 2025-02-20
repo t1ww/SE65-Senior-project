@@ -1,11 +1,12 @@
+
 <script setup lang="ts">
   import Navbar from "@/components/Navbar.vue";
   import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <Navbar/>
-  <RouterView/>
+  <Navbar />
+  <RouterView />
 </template>
 
 <style scoped>
@@ -24,3 +25,6 @@
   filter: drop-shadow(0 0 2em #42b883aa);
 }
 </style>
+
+<!-- Bootstrap CSS -->
+
