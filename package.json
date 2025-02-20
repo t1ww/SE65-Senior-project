@@ -8,7 +8,9 @@
     "fe": "npm run dev --prefix frontend/SE65-SENIOR-PROJECT",
     "backend": "npm run be",
     "frontend": "npm run fe",
-    "dev": "start cmd /k \"npm run be\" && start cmd /k \"npm run fe\""
+    "ts-code-runner": "npm run dev --prefix ts-code-runner",
+    "dev": "start cmd /k \"npm run be\" && start cmd /k \"npm run fe\"",
+    "all": "start cmd /k \"npm run be\" && start cmd /k \"npm run fe\" && start cmd /k \"npm run ts-code-runner\""
   },
   "repository": {
     "type": "git",
