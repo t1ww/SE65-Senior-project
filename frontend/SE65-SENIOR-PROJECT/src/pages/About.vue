@@ -41,21 +41,21 @@ const teamMembers = [
     name: "Krittayot Khueanchan",
     role: "Art Director",
     description: "Some text that describes me lorem ipsum ipsum lorem.",
-    email: "mike@example.com",
+    email: "partyzero00789@gmail.com",
     image: ""
   },
   {
     name: "Narongchai Rongthong",
     role: "Fullstack Developer",
     description: "Some text that describes me lorem ipsum ipsum lorem.",
-    email: "john@example.com",
+    email: "nongtews@gmail.com",
     image: ""
   },
   {
     name: "Phiriya Promkaewma",
     role: "Frontend Developer",
     description: "Some text that describes me lorem ipsum ipsum lorem.",
-    email: "mike@example.com",
+    email: "rainy2snowy.3051@gmail.com",
     image: ""
   }
 ];
