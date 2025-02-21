@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
   import Navbar from "@/components/Navbar.vue";
   import { RouterView } from "vue-router";
@@ -25,6 +24,3 @@
   filter: drop-shadow(0 0 2em #42b883aa);
 }
 </style>
-
-<!-- Bootstrap CSS -->
-

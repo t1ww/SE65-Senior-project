@@ -2,8 +2,13 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import QuestionCard from "@/components/QuestionCard.vue";
 
-const questions = ref<{ id: number; title: string }[]>([]);
+const questions = ref<{
+  id: number;
+  questionName: string,
+  questionDescription: string
+}[]>([]);
 const loading = ref(false);
 const error = ref("");
 const router = useRouter();
@@ -29,21 +34,20 @@ onMounted(fetchQuestions);
 </script>
 
 <template>
-      <div class="question-list-container">
+  <div class="question-list-container">
     <h2>Question List</h2>
-    
+
     <div v-if="loading">Loading questions...</div>
     <div v-if="error" class="error">{{ error }}</div>
-    
+
     <ul v-if="questions.length">
       <li v-for="question in questions" :key="question.id" @click="goToQuestion(question.id)">
-        {{ question.title }}
+        <QuestionCard :questionData="question" />
       </li>
     </ul>
-    
+
     <p v-if="!loading && questions.length === 0">No questions available.</p>
   </div>
-
 </template>
 
 <style scoped>
@@ -53,10 +57,12 @@ onMounted(fetchQuestions);
   padding: 20px;
   text-align: center;
 }
+
 ul {
   list-style: none;
   padding: 0;
 }
+
 li {
   padding: 10px;
   border: 1px solid #ccc;
@@ -65,9 +71,11 @@ li {
   background-color: #f9f9f9;
   transition: background 0.3s;
 }
+
 li:hover {
   background-color: #ddd;
 }
+
 .error {
   color: red;
   margin-top: 10px;
