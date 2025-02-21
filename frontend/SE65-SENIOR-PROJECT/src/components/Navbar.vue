@@ -13,6 +13,8 @@ const filteredRoutes = computed(() => {
 
     // Exclude if route requires authentication and user isn't logged in
     if (route.meta?.requiresAuth && !isLoggedIn()) return false;
+    
+    if (route.meta?.hideAuth && isLoggedIn()) return false;
 
     // Exclude if route requires specific roles and current user's role isn't allowed
     const userRole = getUserData()?.role || '';  // Ensure userRole is always a string

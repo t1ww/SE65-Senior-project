@@ -1,4 +1,11 @@
-export function getUserData() {
+interface UserData {
+  token: string | null;
+  id: string | null;
+  name: string | null;
+  email: string | null;
+  role: string | null;
+}
+export function getUserData(): UserData | null {
     const userData = {
       token: localStorage.getItem('user_token'),
       id: localStorage.getItem('user_id'),
@@ -12,7 +19,7 @@ export function getUserData() {
       return userData
     }
     
-    return {}  // return an empty object if no token is found (i.e., not logged in)
+    return null // return an empty object if no token is found (i.e., not logged in)
 } 
 export function isLoggedIn() {
     // !! converts it into boolean

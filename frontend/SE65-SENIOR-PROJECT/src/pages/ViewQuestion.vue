@@ -2,7 +2,9 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
+import { getUserData } from "@/utils";
 
+// Define the Question interface
 interface Question {
     id: number;
     questionName: string;
@@ -15,26 +17,28 @@ interface Question {
     timeComplexity: string;
 }
 
+// Vue Router
 const route = useRoute();
 const router = useRouter();
 
+// Reactive variables
 const question = ref<Question | null>(null);
 const loading = ref(false);
 const error = ref("");
+const code = ref(""); // User's code input
+const submitting = ref(false); // Submission state
 
-const code = ref("");
+const submissionMessage = ref(""); // Success message
+const submissionError = ref(""); // Error message
 
-const submissionMessage = ref("");
-const submissionError = ref("");
-const submitting = ref(false);
-
+// Fetch question from API
 const fetchQuestion = async () => {
     loading.value = true;
     error.value = "";
     try {
         const response = await axios.get(`http://localhost:5000/questions/${route.params.id}`);
         question.value = response.data;
-        code.value = response.data.startingCode;
+        code.value = response.data.startingCode; // Pre-fill code editor
     } catch (err) {
         error.value = "Failed to fetch question.";
     } finally {
@@ -42,25 +46,49 @@ const fetchQuestion = async () => {
     }
 };
 
+// Submit answer to API
 const submitAnswer = async () => {
-    if (!question.value) return;
+    const userData = getUserData();
+    
+    // Ensure userData is not null before accessing token
+    if (!userData || !userData.token) {
+        submissionError.value = "You must be logged in to submit an answer.";
+        return;
+    }
+
+    const token = userData.token; // Get token from localStorage
+
     submitting.value = true;
     submissionError.value = "";
     submissionMessage.value = "";
+
+    console.log("Token being sent:", token); // Debugging token presence
+
     try {
-        const response = await axios.post("http://localhost:5000/answers", {
-            question_id: question.value.id,
-            answerCode: code.value,
-            result: null,
-        });
+        await axios.post(
+            "http://localhost:5000/answers",
+            {
+                question_id: question.value?.id,
+                answerCode: code.value, // Fix reference to user input
+                result: null, // Backend will process this
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Send token
+                },
+            }
+        );
+
         submissionMessage.value = "Answer submitted successfully!";
-    } catch (err: any) {
-        submissionError.value = err.response?.data?.error || "Submission failed.";
+    } catch (err) {
+        submissionError.value = "Failed to submit answer.";
     } finally {
         submitting.value = false;
     }
 };
 
+
+// Fetch the question when component is mounted
 onMounted(fetchQuestion);
 </script>
 
