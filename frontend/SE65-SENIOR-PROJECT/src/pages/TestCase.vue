@@ -94,6 +94,11 @@ onMounted(() => {
       <router-link to="/create-question">⬅ Back</router-link>
     </div>
 
+    <div class="input-group">
+        <label for="correctCode">Correct Answer Code:</label>
+        <textarea v-model="correctCode" required />
+    </div>
+
     <h3>Test Cases:</h3>
 
     <div class="test-case-list">
@@ -239,4 +244,9 @@ button:disabled {
   background-color: #cc0000;
 }
 
+textarea {
+    width: 100%;
+    
+    resize: none;  /* Prevent resizing */
+}
 </style>

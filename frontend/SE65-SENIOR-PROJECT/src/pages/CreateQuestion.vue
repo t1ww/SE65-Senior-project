@@ -35,16 +35,6 @@ const submitQuestion = () => {
             </div>
 
             <div class="input-group">
-                <label for="startingCode">Starting Code:</label>
-                <textarea v-model="startingCode" required />
-            </div>
-
-            <div class="input-group">
-                <label for="correctCode">Correct Answer Code:</label>
-                <textarea v-model="correctCode" required />
-            </div>
-
-            <div class="input-group">
                 <label for="estimatedRuntime">estimated Runtime:</label>
                 <input v-model="estimatedRuntime" required />
             </div>
