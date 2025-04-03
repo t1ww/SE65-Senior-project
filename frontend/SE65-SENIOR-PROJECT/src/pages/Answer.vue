@@ -22,7 +22,7 @@ const code = ref("");
       </h2>
     </div>
 
-    <div class="card p-4 rounded shadow" style="max-width: 600px; width: 100%">
+    <div>
       <div class="inner-box">
         <div class="mb-3">
           <p><strong>Name:</strong> {{ question.name }}</p>
@@ -78,11 +78,6 @@ textarea {
 button {
   width: 100%;
   margin-top: .5em;
-}
-
-.card {
-  max-width: 100em;
-  width: 100%;
 }
 .inner-box {
   padding: 1rem;
