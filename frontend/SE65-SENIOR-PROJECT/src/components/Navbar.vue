@@ -52,7 +52,7 @@ const filteredRoutes = computed(() => {
 
 <style scoped>
 .green-text {
-  color: #42b883;
+  color: #ec7dfd;
 }
 
 .navbar {
@@ -61,9 +61,9 @@ const filteredRoutes = computed(() => {
   left: 0;
   width: 100%;
   max-width: 100%;
-  background: #333;
+  background: #7b2cbf;
   padding: 1rem 2rem;
-  color: white;
+  color: rgb(255, 255, 255);
   z-index: 1000;
   display: flex;
   justify-content: space-between;
@@ -91,6 +91,6 @@ const filteredRoutes = computed(() => {
 }
 
 .nav-links a:hover {
-  color: #42b883;
+  color: #ffadfc;
 }
 </style>
