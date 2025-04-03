@@ -31,7 +31,7 @@ const code = ref('');
         <p><strong>Output:</strong> {{ question.output }}</p>
       </div>
 
-      <div class="mb-3">
+      <div class="Area">
         <textarea
           v-model="code"
           class="form-control bg-light-purple text-dark"
@@ -46,6 +46,9 @@ const code = ref('');
 </template>
 
 <style scoped>
+.mb-3{
+    text-align: left;
+}
 .text-purple {
   color: #7b2cbf;
 }
