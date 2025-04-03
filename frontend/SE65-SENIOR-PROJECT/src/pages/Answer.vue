@@ -67,4 +67,8 @@ const code = ref('');
 .bg-light-purple {
   background-color: #e0bbf8;
 }
+
+textarea {
+  width: 100%;
+}
 </style>
