@@ -33,7 +33,7 @@ const filteredRoutes = computed(() => {
   <nav class="navbar">
     <router-link to="/">
       <img
-        src="https://upload.wikimedia.org/wikipedia/en/thumb/2/25/Chiang_mai_university_logo.png/225px-Chiang_mai_university_logo.png"
+        src="https://smartoffice.camt.cmu.ac.th/v1r/img/camt_logo.png"
         class="logo" to="/view-question">
     </router-link>
     <ul class="nav-links">
