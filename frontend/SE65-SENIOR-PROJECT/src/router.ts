@@ -10,6 +10,7 @@ import ViewQuestionsList from './pages/ViewQuestionsList.vue';
 import Lecture from './pages/Lecture.vue'
 import TestCase from './pages/TestCase.vue'
 import Answer from './pages/Answer.vue';
+import Review from './pages/Review.vue';
 
 
 const routes = [
@@ -22,7 +23,8 @@ const routes = [
   { name: 'ViewQuestionList', path: '/view-question-list', component: ViewQuestionsList },
   { name: 'Lecture', path: '/lecture', component: Lecture, meta: { requiresAuth: true, allowedRoles: ['professor'] } },
   { name: 'TestCase', path: '/test-case', component: TestCase, meta: { hidden: true } },
-  {name:'Answer',path:'/answer',component: Answer}
+  {name:'Answer',path:'/answer',component: Answer},
+  {name:'Review',path:'/review',component:Review}
 
 ];
 
