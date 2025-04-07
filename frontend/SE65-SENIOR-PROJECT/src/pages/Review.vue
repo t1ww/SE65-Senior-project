@@ -52,14 +52,14 @@ const questionTitle = 'Student A: Question 1 : TSP';
   border-bottom: 1px solid #000;
   margin-bottom: 15px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
   padding-bottom: 10px;
   text-align: center;
 }
 
 .test-cases {
   margin-bottom: 20px;
-  font-size: 14px;
+  font-size: 18px;
   text-align: left;
 }
 
@@ -76,8 +76,7 @@ const questionTitle = 'Student A: Question 1 : TSP';
 .btn {
   padding: 8px;
   font-size: 14px;
-  border: 1px solid #000;
-  background-color: white;
+  border: 1px solid #000;  
   cursor: pointer;
   transition: background-color 0.2s;
 }
