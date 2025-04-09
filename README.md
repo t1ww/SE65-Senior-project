@@ -62,6 +62,15 @@ or alternatively
 
 ---
 
+# How to migrate database
+Make sure you're in backend folder
+
+`cd backend`
+
+`npx knex migrate:latest`
+
+---
+
 # Backend Explained
 
 <details>

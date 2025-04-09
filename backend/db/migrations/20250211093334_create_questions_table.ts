@@ -8,7 +8,6 @@ export async function up(knex: Knex): Promise<void> {
     table.text("hint").nullable();
     table.text("startingCode").notNullable();
     table.text("correctAnswerCode").notNullable();
-    table.json("testCases").notNullable(); // Store as JSON
     table.string("estimatedRuntime").nullable();
     table.string("timeComplexity").nullable();
     table.timestamps(true, true); // Adds created_at & updated_at
