@@ -52,6 +52,9 @@ const submitQuestion = () => {
 </template>
 
 <style scoped>
+h2{
+    color: #ff9233;
+}
 .container {
     max-width: 600px;
     margin: auto;
