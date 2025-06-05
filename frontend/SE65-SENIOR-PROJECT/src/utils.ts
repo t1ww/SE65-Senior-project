@@ -1,3 +1,5 @@
+import router from "@/router";
+
 interface UserData {
   token: string | null;
   id: string | null;
@@ -24,4 +26,12 @@ export function getUserData(): UserData | null {
 export function isLoggedIn() {
     // !! converts it into boolean
     return !!localStorage.getItem('user_token')
+}
+
+export function logout() {
+  localStorage.removeItem('user_token')
+  localStorage.removeItem('user_id')
+  localStorage.removeItem('user_name')
+  localStorage.removeItem('user_email')
+  localStorage.removeItem('user_role')
 }
