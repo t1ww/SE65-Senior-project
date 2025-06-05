@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
 
+const correctCode = ref('');
+
 const loadTestCases = () => {
   const storedTestCases = localStorage.getItem("testCases");
   if (storedTestCases) {
@@ -94,13 +96,9 @@ onMounted(() => {
       <router-link to="/create-question">⬅ Back</router-link>
     </div>
 
-    <div class="input-group">
-        <label for="correctCode">Correct Answer Code:</label>
-        <textarea v-model="correctCode" required />
-    </div>
-
     <h3>Test Cases:</h3>
 
+    <!-- test cases -->
     <div class="test-case-list">
       <div v-for="(testCase, index) in paginatedTestCases" :key="index" class="test-case-item">
         <div class="test-case-header">
@@ -114,6 +112,10 @@ onMounted(() => {
         <div class="input-group">
           <label>Output:</label>
           <input v-model="testCase.output" placeholder="Enter expected output" />
+        </div>
+        <div class="input-group">
+          <label for="correctCode">Correct Answer Code:</label>
+          <textarea v-model="correctCode" required />
         </div>
       </div>
     </div>
@@ -246,7 +248,6 @@ button:disabled {
 
 textarea {
     width: 100%;
-    
     resize: none;  /* Prevent resizing */
 }
 </style>

@@ -5,8 +5,6 @@ import { ref } from 'vue';
 const name = ref('');
 const description = ref('');
 const hint = ref('');
-const startingCode = ref('');
-const correctCode = ref('');
 const estimatedRuntime = ref('');
 const timeComplexity = ref('');
 
