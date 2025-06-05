@@ -41,7 +41,7 @@ const questionTitle = 'Student A: Question 1 : TSP';
 }
 
 .review-box {
-  border: 1px solid #000;
+  border: 1px solid #ea9400;
   padding: 20px;
   background-color: #fff;
   width: 300px;
@@ -49,6 +49,7 @@ const questionTitle = 'Student A: Question 1 : TSP';
 }
 
 .review-header {
+  color: #ff9233;
   border-bottom: 1px solid #000;
   margin-bottom: 15px;
   font-weight: bold;
@@ -58,6 +59,7 @@ const questionTitle = 'Student A: Question 1 : TSP';
 }
 
 .test-cases {
+  color: ;
   margin-bottom: 20px;
   font-size: 18px;
   text-align: left;
@@ -75,6 +77,7 @@ const questionTitle = 'Student A: Question 1 : TSP';
 
 .btn {
   padding: 8px;
+  background-color: #ff9233;
   font-size: 14px;
   border: 1px solid #000;  
   cursor: pointer;
@@ -82,15 +85,15 @@ const questionTitle = 'Student A: Question 1 : TSP';
 }
 
 .btn:hover {
-  background-color: #f0f0f0;
+  background-color: #7a5f45;
 }
 
 .btn.red {
-  background-color: #f4cccc;
-  border-color: #d88;
+  background-color: #ff7700;
+  border-color: rgb(255, 196, 144);
 }
 
 .btn.red:hover {
-  background-color: #e99;
+  background-color: rgb(255, 186, 107);
 }
 </style>
