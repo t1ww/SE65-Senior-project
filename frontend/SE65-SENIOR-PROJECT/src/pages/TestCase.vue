@@ -1,23 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
 
-const correctCode = ref('');
+const itemsPerPage = 2;
 
+// Load test cases from local storage or initialize
 const loadTestCases = () => {
   const storedTestCases = localStorage.getItem("testCases");
   if (storedTestCases) {
-    const parsedCases = JSON.parse(storedTestCases);
-    return parsedCases.length > 0 ? parsedCases : [{ input: "", output: "" }];
+    const parsed = JSON.parse(storedTestCases);
+    return parsed.length > 0 ? parsed : [{ input: "", output: "", correctCode: "" }];
   }
-  return [{ input: "", output: "" }];
+  return [{ input: "", output: "", correctCode: "" }];
 };
 
 const saveTestCases = () => {
   localStorage.setItem("testCases", JSON.stringify(questionData.value.testCases));
-};
-
-const saveCurrentPage = () => {
-  localStorage.setItem("currentPage", JSON.stringify(currentPage.value));
 };
 
 const loadCurrentPage = () => {
@@ -25,12 +22,15 @@ const loadCurrentPage = () => {
   return storedPage ? JSON.parse(storedPage) : 0;
 };
 
+const saveCurrentPage = () => {
+  localStorage.setItem("currentPage", JSON.stringify(currentPage.value));
+};
+
 const questionData = ref({
   testCases: loadTestCases(),
 });
 
 const currentPage = ref(loadCurrentPage());
-const itemsPerPage = 2;
 
 const paginatedTestCases = computed(() => {
   const start = currentPage.value * itemsPerPage;
@@ -53,7 +53,7 @@ const prevPage = () => {
 };
 
 const addTestCase = () => {
-  questionData.value.testCases.push({ input: "", output: "" });
+  questionData.value.testCases.push({ input: "", output: "", correctCode: "" });
   saveTestCases();
 
   if (questionData.value.testCases.length > (currentPage.value + 1) * itemsPerPage) {
@@ -83,61 +83,67 @@ watch(
 
 onMounted(() => {
   questionData.value.testCases = loadTestCases();
-  currentPage.value = 0; 
-  saveTestCases(); 
+  currentPage.value = loadCurrentPage();
 });
-
 </script>
-
 
 <template>
   <div class="container">
-    <div class="back-button">
-      <router-link to="/create-question">⬅ Back</router-link>
-    </div>
+    <div class="content-box">
+      <div class="back-button">
+        <router-link to="/create-question">⬅ Back</router-link>
+      </div>
 
-    <h3>Test Cases:</h3>
+      <h3>Test Cases</h3>
 
-    <!-- test cases -->
-    <div class="test-case-list">
-      <div v-for="(testCase, index) in paginatedTestCases" :key="index" class="test-case-item">
-        <div class="test-case-header">
-          <strong>Test Case {{ currentPage * itemsPerPage + index + 1 }}</strong>
-          <button @click="deleteTestCase(index)" class="delete-button">🗑 Delete</button>
-        </div>
-        <div class="input-group">
-          <label>Input:</label>
-          <input v-model="testCase.input" placeholder="Enter test case input" />
-        </div>
-        <div class="input-group">
-          <label>Output:</label>
-          <input v-model="testCase.output" placeholder="Enter expected output" />
-        </div>
-        <div class="input-group">
-          <label for="correctCode">Correct Answer Code:</label>
-          <textarea v-model="correctCode" required />
+      <div class="test-case-list">
+        <div v-for="(testCase, index) in paginatedTestCases" :key="index" class="test-case-item">
+          <div class="test-case-header">
+            <strong>Test Case {{ currentPage * itemsPerPage + index + 1 }}</strong>
+            <button @click="deleteTestCase(index)" class="delete-button">🗑 Delete</button>
+          </div>
+
+          <div class="input-wrapper">
+            <label>Input:</label>
+            <input v-model="testCase.input" placeholder="Enter test case input" />
+          </div>
+
+          <div class="input-wrapper">
+            <label>Output:</label>
+            <input v-model="testCase.output" placeholder="Enter expected output" />
+          </div>
+
+          <div class="input-wrapper">
+            <label>Correct Answer Code:</label>
+            <textarea v-model="correctCode" placeholder="Enter correct answer code" />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="add-button">
-      <button @click="addTestCase">Add Test Case</button>
-    </div>
+      <div class="add-button">
+        <button @click="addTestCase">Add Test Case</button>
+      </div>
 
-    <div class="pagination">
-      <button @click="prevPage" :disabled="currentPage === 0">⬅ Previous</button>
-      <button @click="nextPage" :disabled="(currentPage + 1) * itemsPerPage >= questionData.testCases.length">Next ➡</button>
+      <div class="pagination">
+        <button @click="prevPage" :disabled="currentPage === 0">⬅ Previous</button>
+        <button @click="nextPage" :disabled="(currentPage + 1) * itemsPerPage >= questionData.testCases.length">Next ➡</button>
+      </div>
     </div>
   </div>
 </template>
 
-
 <style scoped>
 .container {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 700px;
+  margin: 40px auto;
   padding: 20px;
-  text-align: center;
+}
+
+.content-box {
+  border: 2px solid #f57c00;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .back-button {
@@ -146,9 +152,10 @@ onMounted(() => {
 }
 
 .back-button a {
-  color: #007bff;
+  color: #f57c00;
   text-decoration: none;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .back-button a:hover {
@@ -156,74 +163,83 @@ onMounted(() => {
 }
 
 h3 {
-  color: #9c33ff;
+  color: #f57c00;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .test-case-list {
-  color: black;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  align-items: center;
+  gap: 20px;
 }
 
 .test-case-item {
-  width: 100%;
-  max-width: 500px;
-  padding: 15px;
-  border-left: 5px solid #007bff;
-  background: rgb(236, 203, 255);
-  border-radius: 6px;
-  text-align: center;
-}
-
-.input-group {
+  background-color: #ffe2c2;
+  border: 2px solid #f57c00;
+  padding: 20px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.test-case-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
   margin-top: 10px;
 }
 
-.input-group label {
+.input-wrapper label {
   font-weight: bold;
   margin-bottom: 5px;
+  color: #444;
 }
 
+input,
 textarea {
   width: 100%;
-  max-width: 400px;
-  min-height: 40px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 14px;
+  font-family: monospace;
+  resize: none;
+  box-sizing: border-box;
 }
 
 .add-button {
-  margin-top: 20px;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
+  text-align: center;
   margin-top: 20px;
 }
 
 button {
-  padding: 8px 15px;
-  font-size: 14px;
-  font-weight: bold;
-  background-color: #007bff;
+  background-color: #f57c00;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background-color 0.3s ease;
   margin: 5px;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #e06600;
 }
 
 button:disabled {
@@ -233,21 +249,13 @@ button:disabled {
 
 .delete-button {
   background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 10px;
   font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
 .delete-button:hover {
   background-color: #cc0000;
 }
 
-textarea {
-    width: 100%;
-    resize: none;  /* Prevent resizing */
-}
 </style>

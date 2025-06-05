@@ -8,8 +8,7 @@ const navigateTo = (path: string | RouteLocationAsRelativeGeneric | RouteLocatio
 </script>
 
 <template>
-    <div class="container">
-    <h1 class="title">Lecturer Main Page</h1>
+  <div class="container">
     <div class="menu">
       <button @click="navigateTo('/register')">Upload Students</button>
       <button @click="navigateTo('/view-students')">View Students</button>
@@ -26,30 +25,33 @@ const navigateTo = (path: string | RouteLocationAsRelativeGeneric | RouteLocatio
   align-items: center;
   justify-content: center;
   height: 100vh;
-
 }
+
 .title {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #ffffff;
+  color: #f57c00; /* Orange title */
 }
+
 .menu {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
+
 button {
   width: 300px;
   padding: 15px;
   font-size: 1.2rem;
   border: none;
   border-radius: 8px;
-  background-color: #007bff;
+  background-color: #f57c00; /* Orange button */
   color: white;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
+
 button:hover {
-  background-color: #0056b3;
+  background-color: #e06600; /* Darker orange on hover */
 }
 </style>
