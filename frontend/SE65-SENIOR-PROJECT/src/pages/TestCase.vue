@@ -143,7 +143,6 @@ onMounted(() => {
   border: 2px solid #f57c00;
   border-radius: 15px;
   padding: 25px;
-
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -177,7 +176,7 @@ h3 {
 
 .test-case-item {
   background-color: #ffe2c2;
-  border-left: 5px solid #f57c00;
+  border: 2px solid #f57c00;
   padding: 20px;
   border-radius: 10px;
   display: flex;
