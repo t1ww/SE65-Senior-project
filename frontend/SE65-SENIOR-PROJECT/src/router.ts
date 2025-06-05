@@ -12,7 +12,6 @@ import Lecture from "./pages/Lecture.vue";
 import TestCase from "./pages/TestCase.vue";
 import Answer from "./pages/Answer.vue";
 import Review from "./pages/Review.vue";
-import { logout } from "./utils";
 
 const routes = [
   { name: "Home", path: "/", component: Home },
@@ -61,12 +60,5 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-router.beforeEach((to, _from, next) => {
-  if (to.path === '/logout') {
-    logout()
-    return
-  }
-  next()
-})
 
 export default router;

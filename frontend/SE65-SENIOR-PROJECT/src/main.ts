@@ -6,7 +6,7 @@ import router from './router'
 import axios from 'axios'
 
 // utils
-import { isLoggedIn, getUserData } from './utils'
+import { isAuthenticated, getUserData } from '@/store/auth'
 
 // Set Axios base URL
 axios.defaults.baseURL = 'http://localhost:5000'
@@ -14,7 +14,7 @@ axios.defaults.baseURL = 'http://localhost:5000'
 const app = createApp(App)
 
 // Provide functions instead of using globalProperties
-app.provide('isLoggedIn', isLoggedIn)
+app.provide('isAuthenticated', isAuthenticated)
 app.provide('getUserData', getUserData)
 
 app.use(createPinia())

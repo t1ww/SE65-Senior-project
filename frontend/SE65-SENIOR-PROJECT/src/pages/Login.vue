@@ -1,36 +1,43 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import axios from 'axios'
-import { useRouter } from 'vue-router'
+import { ref } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { loginUser } from "@/store/auth";
 
-const email = ref('')
-const password = ref('')
-const showPassword = ref(false)
-const loading = ref(false)
-const error = ref('')
 
-const router = useRouter()
+const email = ref("");
+const password = ref("");
+const showPassword = ref(false);
+const loading = ref(false);
+const error = ref("");
+
+const router = useRouter();
 
 const handleLogin = async () => {
-  error.value = ''
-  loading.value = true
+  error.value = "";
+  loading.value = true;
   try {
-    const { data } = await axios.post('/users/login', {
+    const { data } = await axios.post("/users/login", {
       email: email.value,
-      password: password.value
-    })
-    localStorage.setItem('user_token', data.token)
-    localStorage.setItem('user_id', data.id)
-    localStorage.setItem('user_name', data.name)
-    localStorage.setItem('user_email', data.email)
-    localStorage.setItem('user_role', data.role)
-    router.push({ path: "/" })
+      password: password.value,
+    });
+
+    loginUser({
+      token: data.token,
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+    });
+
+    router.push({ path: "/" });
   } catch (err: any) {
-    error.value = err.response?.data?.error || 'Login failed. Please try again.'
+    error.value =
+      err.response?.data?.error || "Login failed. Please try again.";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
 
 <template>
@@ -45,9 +52,13 @@ const handleLogin = async () => {
       <div class="input-group">
         <label>Password</label>
         <div class="password-wrapper">
-          <input :type="showPassword ? 'text' : 'password'" v-model="password" required />
+          <input
+            :type="showPassword ? 'text' : 'password'"
+            v-model="password"
+            required
+          />
           <span class="toggle" @click="showPassword = !showPassword">
-            {{ showPassword ? 'Hide' : 'Show' }}
+            {{ showPassword ? "Hide" : "Show" }}
           </span>
         </div>
       </div>
@@ -57,7 +68,7 @@ const handleLogin = async () => {
       </div>
 
       <button type="submit" :disabled="loading">
-        {{ loading ? 'Logging in...' : 'Login' }}
+        {{ loading ? "Logging in..." : "Login" }}
       </button>
 
       <p v-if="error" class="error">{{ error }}</p>
@@ -156,5 +167,4 @@ button:disabled {
   color: red;
   margin-top: 15px;
 }
-
 </style>

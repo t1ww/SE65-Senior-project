@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { logout } from '@/utils'
+import { logoutUser } from "@/store/auth";
+import { onMounted } from "vue";
 
 onMounted(() => {
-  logout()
-})
+  logoutUser();
+});
 </script>
+1

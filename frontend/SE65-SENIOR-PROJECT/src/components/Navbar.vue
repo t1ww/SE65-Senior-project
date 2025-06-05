@@ -1,31 +1,23 @@
 <script setup lang="ts">
-import router from "@/router";
-import { computed, inject } from 'vue'
-
-// Inject the functions with fallback defaults
-const isLoggedIn = inject<() => boolean>('isLoggedIn', () => false);
-const getUserData = inject<() => any>('getUserData', () => ({}));
+import { computed } from "vue"
+import router from "@/router"
+import { getUserData, isAuthenticated } from "@/store/auth"
 
 const filteredRoutes = computed(() => {
+  const userRole = getUserData()?.role
+
   return router.getRoutes().filter(route => {
-    // Exclude if hidden
-    if (route.meta?.hidden) return false;
-
-    // Exclude if route requires authentication and user isn't logged in
-    if (route.meta?.requiresAuth && !isLoggedIn()) return false;
-    
-    if (route.meta?.hideAuth && isLoggedIn()) return false;
-
-    // Exclude if route requires specific roles and current user's role isn't allowed
-    const userRole = getUserData()?.role || '';  // Ensure userRole is always a string
-    if (route.meta?.allowedRoles?.length && !route.meta.allowedRoles.includes(userRole)) {
-      return false;
+    if (route.meta?.hidden) return false
+    if (route.meta?.requiresAuth && !isAuthenticated.value) return false
+    if (route.meta?.hideAuth && isAuthenticated.value) return false
+    if (route.meta?.allowedRoles?.length && userRole != null && !route.meta.allowedRoles.includes(userRole)) {
+      return false
     }
-
-    return true;
-  });
-});
+    return true
+  })
+})
 </script>
+
 
 
 

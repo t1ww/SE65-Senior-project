@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-import { getUserData } from "@/utils";
+import { getUserData } from "@/store/auth";
 
 // Define the Question interface
 interface Question {
