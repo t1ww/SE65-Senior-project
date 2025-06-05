@@ -10,78 +10,142 @@ const question = {
 };
 
 const code = ref("");
+
+const handleFileUpload = (event: Event) => {
+  const file = (event.target as HTMLInputElement)?.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    code.value = e.target?.result as string;
+  };
+  reader.readAsText(file);
+};
 </script>
 
 <template>
-  <div
-    class="answer-page container-fluid d-flex align-items-center justify-content-center min-vh-100"
-  >
-    <div class="d-flex justify-content-between align-items-center">
-      <h2 class="text-center w-100 text-purple">
-        Question: {{ question.name }}
-      </h2>
-    </div>
+  <div class="answer-page">
+    <h2 class="heading">Question: {{ question.name }}</h2>
 
-    <div>
-      <div class="inner-box">
-        <div class="mb-3">
-          <p><strong>Name:</strong> {{ question.name }}</p>
-          <p><strong>Description:</strong> {{ question.description }}</p>
-          <p><strong>Hint:</strong> {{ question.hint }}</p>
-          <p><strong>Input:</strong> {{ question.input }}</p>
-          <p><strong>Output:</strong> {{ question.output }}</p>
-        </div>
+    <div class="question-box">
+      <p><strong>Name:</strong> {{ question.name }}</p>
+      <p><strong>Description:</strong> {{ question.description }}</p>
+      <p><strong>Hint:</strong> {{ question.hint }}</p>
+      <p><strong>Example Input :</strong> {{ question.input }}</p>
+      <p><strong>Example Output :</strong> {{ question.output }}</p>
 
-        <div class="Area">
-          <textarea
-            v-model="code"
-            class="form-control bg-light-purple text-dark"
-            placeholder="Upload code here or write it..."
-            rows="8"
-          ></textarea>
-        </div>
+      <div class="code-upload">
+        <textarea
+          v-model="code"
+          class="code-area"
+          placeholder="Upload code here or write it..."
+          rows="8"
+        ></textarea>
+
+        <label class="upload-label" for="fileUpload">Upload Code</label>
+        <input
+          id="fileUpload"
+          type="file"
+          accept=".txt,.js,.ts,.py,.java,.cpp,.c"
+          @change="handleFileUpload"
+          class="hidden-file"
+        />
       </div>
-
-      <button class="btn btn-purple w-100">Submit</button>
     </div>
+
+    <button class="submit-button">Submit</button>
   </div>
 </template>
 
 <style scoped>
-.mb-3 {
-  text-align: left;
-}
-.text-purple {
-  color: #7b2cbf;
+.answer-page {
+  max-width: 480px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
 }
 
-.btn-purple {
-  background-color: #7b2cbf;
+.heading {
+  color: #f57c00;
+  font-weight: bold;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.question-box {
+  border: 1px solid #f57c00;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.question-box p {
+  margin: 10px 0;
+  font-size: 15px;
+}
+
+.code-upload {
+  background-color: #fcd8b2;
+  border-radius: 10px;
+  margin-top: 15px;
+  padding: 10px;
+  position: relative;
+}
+
+.code-area {
+  width: 100%;
+  border: none;
+  background: transparent;
+  resize: vertical;
+  min-height: 120px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
+
+.code-area::placeholder {
+  color: #efb07e;
+  font-weight: 500;
+  text-align: center;
+}
+
+.upload-label {
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #f57c00;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-label:hover {
+  background-color: #e06600;
+}
+
+.hidden-file {
+  display: none;
+}
+
+.submit-button {
+  background-color: #f57c00;
   color: white;
   font-weight: bold;
   border: none;
-}
-
-.btn-purple:hover {
-  background-color: #5a189a;
-}
-
-.bg-light-purple {
-  background-color: #e0bbf8;
-}
-
-textarea {
+  border-radius: 8px;
+  padding: 12px 20px;
   width: 100%;
-  resize: vertical;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
-button {
-  width: 100%;
-  margin-top: .5em;
-}
-.inner-box {
-  padding: 1rem;
-  border: 3px solid #5a189a; /* Adjust thickness & color */
-  border-radius: 12px; /* Controls roundness */
+.submit-button:hover {
+  background-color: #e06600;
 }
 </style>
