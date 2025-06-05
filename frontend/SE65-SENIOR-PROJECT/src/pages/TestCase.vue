@@ -1,23 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from "vue";
 
-const correctCode = ref("");
+const itemsPerPage = 2;
 
+// Load test cases from local storage or initialize
 const loadTestCases = () => {
   const storedTestCases = localStorage.getItem("testCases");
   if (storedTestCases) {
-    const parsedCases = JSON.parse(storedTestCases);
-    return parsedCases.length > 0 ? parsedCases : [{ input: "", output: "" }];
+    const parsed = JSON.parse(storedTestCases);
+    return parsed.length > 0 ? parsed : [{ input: "", output: "", correctCode: "" }];
   }
-  return [{ input: "", output: "" }];
+  return [{ input: "", output: "", correctCode: "" }];
 };
 
 const saveTestCases = () => {
   localStorage.setItem("testCases", JSON.stringify(questionData.value.testCases));
-};
-
-const saveCurrentPage = () => {
-  localStorage.setItem("currentPage", JSON.stringify(currentPage.value));
 };
 
 const loadCurrentPage = () => {
@@ -25,12 +22,15 @@ const loadCurrentPage = () => {
   return storedPage ? JSON.parse(storedPage) : 0;
 };
 
+const saveCurrentPage = () => {
+  localStorage.setItem("currentPage", JSON.stringify(currentPage.value));
+};
+
 const questionData = ref({
   testCases: loadTestCases(),
 });
 
 const currentPage = ref(loadCurrentPage());
-const itemsPerPage = 2;
 
 const paginatedTestCases = computed(() => {
   const start = currentPage.value * itemsPerPage;
@@ -53,7 +53,7 @@ const prevPage = () => {
 };
 
 const addTestCase = () => {
-  questionData.value.testCases.push({ input: "", output: "" });
+  questionData.value.testCases.push({ input: "", output: "", correctCode: "" });
   saveTestCases();
 
   if (questionData.value.testCases.length > (currentPage.value + 1) * itemsPerPage) {
@@ -83,8 +83,7 @@ watch(
 
 onMounted(() => {
   questionData.value.testCases = loadTestCases();
-  currentPage.value = 0;
-  saveTestCases();
+  currentPage.value = loadCurrentPage();
 });
 </script>
 
@@ -103,17 +102,20 @@ onMounted(() => {
             <strong>Test Case {{ currentPage * itemsPerPage + index + 1 }}</strong>
             <button @click="deleteTestCase(index)" class="delete-button">🗑 Delete</button>
           </div>
-          <div class="input-group">
+
+          <div class="input-wrapper">
             <label>Input:</label>
             <input v-model="testCase.input" placeholder="Enter test case input" />
           </div>
-          <div class="input-group">
+
+          <div class="input-wrapper">
             <label>Output:</label>
             <input v-model="testCase.output" placeholder="Enter expected output" />
           </div>
-          <div class="input-group">
+
+          <div class="input-wrapper">
             <label>Correct Answer Code:</label>
-            <textarea v-model="correctCode" required />
+            <textarea v-model="correctCode" placeholder="Enter correct answer code" />
           </div>
         </div>
       </div>
@@ -132,7 +134,7 @@ onMounted(() => {
 
 <style scoped>
 .container {
-  max-width: 600px;
+  max-width: 700px;
   margin: 40px auto;
   padding: 20px;
 }
@@ -178,24 +180,30 @@ h3 {
   border-left: 5px solid #f57c00;
   padding: 20px;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .test-case-header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   color: #333;
 }
 
-.input-group {
+.input-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 500px;
   margin-top: 10px;
 }
 
-.input-group label {
+.input-wrapper label {
   font-weight: bold;
   margin-bottom: 5px;
   color: #444;
@@ -210,6 +218,7 @@ textarea {
   font-size: 14px;
   font-family: monospace;
   resize: none;
+  box-sizing: border-box;
 }
 
 .add-button {
@@ -249,4 +258,5 @@ button:disabled {
 .delete-button:hover {
   background-color: #cc0000;
 }
+
 </style>
