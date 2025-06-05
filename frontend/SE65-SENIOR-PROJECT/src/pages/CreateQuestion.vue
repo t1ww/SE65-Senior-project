@@ -64,6 +64,7 @@ const submitQuestion = () => {
 label {
     font-weight: bold;
 }
+
 input, textarea {
     width: 100%;
     padding: 8px;
@@ -71,8 +72,17 @@ input, textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+input {
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+  border: 2px solid #9d7643;
+  border-radius: 8px;
+  font-size: 14px;
+  color: black;
+}
 button {
-    background-color: #007bff;
+    background-color: #f57c00;
     color: white;
     padding: 10px;
     border: none;
