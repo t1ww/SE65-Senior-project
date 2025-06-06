@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 
 const testCases = [
   { name: 'Test case 1', score: '100/100' },
@@ -59,7 +58,6 @@ const questionTitle = 'Student A: Question 1 : TSP';
 }
 
 .test-cases {
-  color: ;
   margin-bottom: 20px;
   font-size: 18px;
   text-align: left;
