@@ -9,7 +9,7 @@ const estimatedRuntime = ref('');
 const timeComplexity = ref('');
 
 const submitQuestion = () => {
-    console.log({ name: name.value, detail: detail.value, goal: goal.value, example: example.value, testCase: testCase.value });
+    console.log({ name: name.value, description: description.value, hint: hint.value, estimatedRuntime: estimatedRuntime.value, timeComplexity: timeComplexity.value });
 };
 </script>
 
