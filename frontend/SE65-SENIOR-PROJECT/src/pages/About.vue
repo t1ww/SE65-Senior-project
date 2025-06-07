@@ -1,4 +1,38 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { TeamMember } from "@/types/types";
+import { ref } from "vue";
+
+const teamMembers = ref<TeamMember[]>([
+  {
+    name: "Karanthaphong Areerak",
+    role: "Frontend Developer",
+    description: "Some text that describes me lorem ipsum ipsum lorem.",
+    email: "ocpe278@gmail.com",
+    image: "",
+  },
+  {
+    name: "Krittayot Khueanchan",
+    role: "Art Director",
+    description: "Some text that describes me lorem ipsum ipsum lorem.",
+    email: "partyzero00789@gmail.com",
+    image: "",
+  },
+  {
+    name: "Narongchai Rongthong",
+    role: "Fullstack Developer",
+    description: "Some text that describes me lorem ipsum ipsum lorem.",
+    email: "nongtews@gmail.com",
+    image: "",
+  },
+  {
+    name: "Phiriya Promkaewma",
+    role: "Frontend Developer",
+    description: "Some text that describes me lorem ipsum ipsum lorem.",
+    email: "rainy2snowy.3051@gmail.com",
+    image: "",
+  },
+]);
+</script>
 
 <template>
   <header>
@@ -12,9 +46,13 @@
   <h2 class="text-center">Our Team</h2>
   <div class="container">
     <div class="row">
-      <div class="col-md-6 mb-4" v-for="(member, index) in teamMembers" :key="member.name">
+      <div
+        class="col-md-6 mb-4"
+        v-for="(member, _index) in teamMembers"
+        :key="member.name"
+      >
         <div class="card text-center">
-          <img :src="member.image" :alt="member.name" class="card-img-top">
+          <img :src="member.image" :alt="member.name" class="card-img-top" />
           <div class="card-body">
             <h2>{{ member.name }}</h2>
             <p class="title">{{ member.role }}</p>
@@ -27,39 +65,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const teamMembers = [
-  {
-    name: "Karanthaphong Areerak",
-    role: "Frontend Developer",
-    description: "Some text that describes me lorem ipsum ipsum lorem.",
-    email: "ocpe278@gmail.com",
-    image: ""
-  },
-  {
-    name: "Krittayot Khueanchan",
-    role: "Art Director",
-    description: "Some text that describes me lorem ipsum ipsum lorem.",
-    email: "partyzero00789@gmail.com",
-    image: ""
-  },
-  {
-    name: "Narongchai Rongthong",
-    role: "Fullstack Developer",
-    description: "Some text that describes me lorem ipsum ipsum lorem.",
-    email: "nongtews@gmail.com",
-    image: ""
-  },
-  {
-    name: "Phiriya Promkaewma",
-    role: "Frontend Developer",
-    description: "Some text that describes me lorem ipsum ipsum lorem.",
-    email: "rainy2snowy.3051@gmail.com",
-    image: ""
-  }
-];
-</script>
 
 <style scoped>
 header {

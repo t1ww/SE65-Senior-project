@@ -5,3 +5,10 @@ export interface UserData {
   email: string | null;
   role: string | null;
 }
+export interface TeamMember {
+  name: string
+  role: string
+  description: string
+  email: string
+  image: string
+}
