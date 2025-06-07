@@ -1,30 +1,31 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 
-const testCases = [
-  { name: 'Test case 1', score: '100/100' },
-  { name: 'Test case 2', score: '50/100' }
-];
-
-const questionTitle = 'Student A: Question 1 : TSP';
+const question = ref({
+  name: 'Q1',
+  description: 'Find the biggest number',
+  hint: '2 5 8 9 = 9',
+  exampleInput: '2 5 8 7 4 9 6 2 4 7 7 4 8 5 1 3 10 5',
+  exampleOutput: '10'
+});
 </script>
 
 <template>
   <div class="review-container">
+    <h2>Question: {{ question.name }}</h2>
     <div class="review-box">
-      <div class="review-header">
-        <strong>{{ questionTitle }}</strong>
-      </div>
+      <p><strong>Name:</strong> {{ question.name }}</p>
+      <p><strong>Description:</strong> {{ question.description }}</p>
+      <p><strong>Hint:</strong> {{ question.hint }}</p>
+      <p><strong>Example Input:</strong> {{ question.exampleInput }}</p>
+      <p><strong>Example Output:</strong> {{ question.exampleOutput }}</p>
 
-      <div class="test-cases">
-        <div v-for="(tc, i) in testCases" :key="i" class="test-case">
-          {{ tc.name }} : {{ tc.score }}
-        </div>
-      </div>
+      <div class="links">
+        <router-link to="/view-test" class="link">View Test Case</router-link>
+        <router-link to="/edit-question" class="link with-icon">
+          <span class="icon">📝</span> Edit Question
+        </router-link>
 
-      <div class="buttons">
-        <button class="btn">View Test Input</button>
-        <button class="btn">View Test Output</button>
-        <button class="btn red">View Answer Code</button>
       </div>
     </div>
   </div>
@@ -32,66 +33,46 @@ const questionTitle = 'Student A: Question 1 : TSP';
 
 <style scoped>
 .review-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f8f9fa;
+  text-align: center;
+  padding: 50px;
+}
+
+h2 {
+  color: #f57c00;
+  margin-bottom: 20px;
 }
 
 .review-box {
-  border: 1px solid #ea9400;
-  padding: 20px;
+  border: 1px solid #f57c00;
+  border-radius: 12px;
+  padding: 25px;
   background-color: #fff;
-  width: 300px;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-}
-
-.review-header {
-  color: #ff9233;
-  border-bottom: 1px solid #000;
-  margin-bottom: 15px;
-  font-weight: bold;
-  font-size: 20px;
-  padding-bottom: 10px;
-  text-align: center;
-}
-
-.test-cases {
-  margin-bottom: 20px;
-  font-size: 18px;
+  display: inline-block;
+  min-width: 350px;
   text-align: left;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.test-case {
-  margin-bottom: 5px;
-}
-
-.buttons {
+.links {
+  margin-top: 15px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
 }
 
-.btn {
-  padding: 8px;
-  background-color: #ff9233;
-  font-size: 14px;
-  border: 1px solid #000;  
+.link {
+  color: #f57c00;
+  text-decoration: underline;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-weight: bold;
 }
 
-.btn:hover {
-  background-color: #7a5f45;
+.link.with-icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.btn.red {
-  background-color: #ff7700;
-  border-color: rgb(255, 196, 144);
-}
-
-.btn.red:hover {
-  background-color: rgb(255, 186, 107);
+.icon {
+  font-size: 16px;
 }
 </style>

@@ -13,6 +13,10 @@ import ViewQuestionsList from "./pages/ViewQuestionsList.vue";
 import Lecture from "./pages/Lecture.vue";
 import TestCase from "./pages/TestCase.vue";
 import Review from "./pages/Review.vue";
+import ViewTest from "./pages/Viewtest.vue";
+import EditQuestion from "./pages/EditQuestion.vue";
+import EditTestCase from "./pages/EditTestCase.vue";
+
 
 /**
  * Meta Field Usage:
@@ -62,6 +66,9 @@ const routes = [
     meta: { hidden: true },
   },
   { name: "Review", path: "/review", component: Review },
+  { name: "ViewTest", path: "/view-test", component: ViewTest },
+  { name: "EditQuestion", path: "/edit-question", component: EditQuestion },
+  { name: "EdittestCase", path: "/edit-test-case", component: EditTestCase },
 ];
 
 const router = createRouter({
