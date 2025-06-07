@@ -3,19 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { getUserData } from "@/store/auth";
-
-// Define the Question interface
-interface Question {
-    id: number;
-    questionName: string;
-    questionDescription: string;
-    hint: string;
-    startingCode: string;
-    correctAnswerCode: string;
-    testCases: { input: string; output: string }[];
-    estimatedRuntime: string;
-    timeComplexity: string;
-}
+import type { Question } from "@/types/types";
 
 // Vue Router
 const route = useRoute();
@@ -36,7 +24,7 @@ const fetchQuestion = async () => {
     loading.value = true;
     error.value = "";
     try {
-        const response = await axios.get(`http://localhost:5000/questions/${route.params.id}`);
+        const response = await axios.get(`/questions/${route.params.id}`);
         question.value = response.data;
         code.value = response.data.startingCode; // Pre-fill code editor
     } catch (err) {

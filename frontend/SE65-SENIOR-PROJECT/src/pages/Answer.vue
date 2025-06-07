@@ -21,6 +21,11 @@ const handleFileUpload = (event: Event) => {
   };
   reader.readAsText(file);
 };
+
+const submit = () => {
+  console.log("Submitted question:", question);
+  console.log("Submitted code:", code.value);
+};
 </script>
 
 <template>
@@ -53,7 +58,7 @@ const handleFileUpload = (event: Event) => {
       </div>
     </div>
 
-    <button class="submit-button">Submit</button>
+    <button class="submit-button" @click="submit">Submit</button>
   </div>
 </template>
 

@@ -5,7 +5,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 
-// utils
+// Auth
 import { isAuthenticated, getUserData } from '@/store/auth'
 
 // Set Axios base URL
@@ -13,7 +13,7 @@ axios.defaults.baseURL = 'http://localhost:5000'
 
 const app = createApp(App)
 
-// Provide functions instead of using globalProperties
+// Provide functions
 app.provide('isAuthenticated', isAuthenticated)
 app.provide('getUserData', getUserData)
 

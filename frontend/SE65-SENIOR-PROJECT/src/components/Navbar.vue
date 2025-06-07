@@ -6,6 +6,8 @@ import { getUserData, isAuthenticated } from "@/store/auth"
 const filteredRoutes = computed(() => {
   const userRole = getUserData()?.role
 
+  // Filter routes for navbar display based on their meta fields in router.ts
+  // (e.g., hidden, requiresAuth, hideAuth, allowedRoles)
   return router.getRoutes().filter(route => {
     if (route.meta?.hidden) return false
     if (route.meta?.requiresAuth && !isAuthenticated.value) return false
@@ -17,9 +19,6 @@ const filteredRoutes = computed(() => {
   })
 })
 </script>
-
-
-
 
 <template>
   <nav class="navbar">

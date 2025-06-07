@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
+
+// Importing all page components
 import Home from "@/pages/Home.vue";
 import About from "@/pages/About.vue";
 import Login from "@/pages/Login.vue";
@@ -13,6 +15,14 @@ import TestCase from "./pages/TestCase.vue";
 import Answer from "./pages/Answer.vue";
 import Review from "./pages/Review.vue";
 
+/**
+ * Meta Field Usage:
+ *
+ * - hidden:         Exclude the route from the navigation bar completely.
+ * - hideAuth:       Hide route from navbar if user is already authenticated (e.g., login page).
+ * - requiresAuth:   Route is only accessible when the user is logged in.
+ * - allowedRoles:   Restrict access to users with specific roles (e.g., professors only).
+ */
 const routes = [
   { name: "Home", path: "/", component: Home },
   { name: "About", path: "/about", component: About },
