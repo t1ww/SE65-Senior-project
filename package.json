@@ -1,8 +1,14 @@
 {
   "name": "se65-senior-project",
   "version": "1.0.0",
+  "private": true,
   "description": "CAMT SE65 `senior project` for my group",
   "main": "index.js",
+  "workspaces": [
+    "backend",
+    "frontend/SE65-SENIOR-PROJECT",
+    "ts-code-runner"
+  ],
   "scripts": {
     "be": "npm run dev --prefix backend",
     "fe": "npm run dev --prefix frontend/SE65-SENIOR-PROJECT",

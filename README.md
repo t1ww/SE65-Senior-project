@@ -9,7 +9,7 @@ Members:
       652115030 Phiriya Promkaewma
 
 ---
-
+note: you can now `npm install` directly in root project folder
 <details>
 <summary>Starting MySQL on Docker <<<</summary>
 
