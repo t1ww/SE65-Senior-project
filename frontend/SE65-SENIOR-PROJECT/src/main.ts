@@ -4,16 +4,12 @@ import './style.css'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
-import dotenv from "dotenv";
 
 // Auth
 import { isAuthenticated, getUserData } from '@/store/auth'
 
 // Set Axios base URL
-dotenv.config({ path: '.env.dev' });
-const BACKEND_PORT = process.env.BACKEND_PORT;
-
-axios.defaults.baseURL = `http://localhost:${BACKEND_PORT}`
+axios.defaults.baseURL = 'http://localhost:5000'
 
 const app = createApp(App)
 

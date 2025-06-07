@@ -5,10 +5,10 @@ import userRoutes from "./routes/users";
 import questionRoutes from "./routes/questions";
 import answerRoutes from "./routes/answers"
 
-dotenv.config({ path: '.env.dev' });
+dotenv.config();
 
 const app = express();
-const BACKEND_PORT = process.env.BACKEND_PORT;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json()); // Parse JSON
@@ -16,6 +16,6 @@ app.use("/users", userRoutes); // Mount user routes
 app.use("/questions", questionRoutes);
 app.use("/answers", answerRoutes);
 
-app.listen(BACKEND_PORT, () => {
-  console.log(`Server running at http://localhost:${BACKEND_PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
