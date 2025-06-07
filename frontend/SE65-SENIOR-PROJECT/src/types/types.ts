@@ -21,7 +21,7 @@ export interface Question {
     exampleOutput: string;
     startingCode: string;
     correctAnswerCode: string;
-    testCases: { input: string; output: string }[];
+    testCases: { input: string; expectedOutput: string }[];
     estimatedRuntime: string;
     timeComplexity: string;
 }

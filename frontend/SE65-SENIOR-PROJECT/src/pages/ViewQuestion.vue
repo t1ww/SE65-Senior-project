@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-import { getUserData, isAuthenticated } from "@/store/auth"
+import { getUserData, isAuthenticated } from "@/store/auth";
 import type { Question } from "@/types/types";
 
 // Router
@@ -17,6 +17,7 @@ const code = ref("");
 const submitting = ref(false);
 const submissionMessage = ref("");
 const submissionError = ref("");
+const resultOutput = ref<string | null>(null);
 
 // Fetch question from API
 const fetchQuestion = async () => {
@@ -26,7 +27,7 @@ const fetchQuestion = async () => {
     const response = await axios.get(`/questions/${route.params.id}`);
     question.value = response.data;
     code.value = response.data.startingCode;
-    console.log(question.value)
+    console.log(question.value);
   } catch (err) {
     error.value = "Failed to fetch question.";
   } finally {
@@ -53,7 +54,8 @@ const submitAnswer = async () => {
     return;
   }
   if (userData == null) {
-    submissionError.value = "Your logged in account is null, please try re-login.";
+    submissionError.value =
+      "Your logged in account is null, please try re-login.";
     return;
   }
   if (question.value == null) {
@@ -64,27 +66,37 @@ const submitAnswer = async () => {
   submitting.value = true;
   submissionMessage.value = "";
   submissionError.value = "";
+  const cleanTestCases = JSON.parse(JSON.stringify(question.value.testCases));
+
+  const payload = {
+    code: code.value,
+    testCases: cleanTestCases,
+  };
 
   console.log("Submitting code:");
   console.log(code.value);
   console.log("testCases:");
   console.log(question.value.testCases);
+  // Sending request
   try {
-    await axios.post(
-      "http://localhost:3000/run",
-      {
-        code: code.value,
-        testCases: question.value.testCases,
+    const res = await axios.post("http://localhost:3000/run", payload, {
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
-        },
-      }
-    );
-    submissionMessage.value = "Answer submitted successfully!";
-  } catch (err) {
-    submissionError.value = "Failed to submit answer. : " + err;
+    });
+
+    // Access returned response
+    const result = res.data;
+    console.log("Run Result:", result);
+
+    // You can display part of the result or store it in a reactive variable
+    submissionMessage.value =
+      result.message || "Answer submitted successfully!";
+    resultOutput.value = result.output;
+  } catch (err: any) {
+    console.error("Submission Error:", err);
+    submissionError.value =
+      err.response?.data?.error || "Failed to submit answer.";
   } finally {
     submitting.value = false;
   }
@@ -95,7 +107,12 @@ onMounted(fetchQuestion);
 
 <template>
   <div class="answer-page">
-    <button @click="router.push('/view-question-list')" style="margin-bottom: 16px;">← Back to List</button>
+    <button
+      @click="router.push('/view-question-list')"
+      style="margin-bottom: 16px"
+    >
+      ← Back to List
+    </button>
 
     <div v-if="loading" class="loading">Loading question...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
@@ -109,8 +126,12 @@ onMounted(fetchQuestion);
         <p><strong>Hint:</strong> {{ question.hint }}</p>
         <p><strong>Example Input:</strong> {{ question.exampleInput }}</p>
         <p><strong>Example Output:</strong> {{ question.exampleOutput }}</p>
-        <p><strong>Extimated Runtime:</strong> {{ question.estimatedRuntime }}</p>
-        <p><strong>Time Complexity O(n):</strong> {{ question.timeComplexity }}</p>
+        <p>
+          <strong>Extimated Runtime:</strong> {{ question.estimatedRuntime }}
+        </p>
+        <p>
+          <strong>Time Complexity O(n):</strong> {{ question.timeComplexity }}
+        </p>
 
         <div class="code-upload">
           <textarea
@@ -131,11 +152,17 @@ onMounted(fetchQuestion);
         </div>
       </div>
 
-      <button class="submit-button" :disabled="submitting" @click="submitAnswer">
+      <button
+        class="submit-button"
+        :disabled="submitting"
+        @click="submitAnswer"
+      >
         {{ submitting ? "Submitting..." : "Submit" }}
       </button>
 
-      <div v-if="submissionMessage" class="success">{{ submissionMessage }}</div>
+      <div v-if="submissionMessage" class="success">
+        {{ submissionMessage }}
+      </div>
       <div v-if="submissionError" class="error">{{ submissionError }}</div>
     </div>
   </div>
