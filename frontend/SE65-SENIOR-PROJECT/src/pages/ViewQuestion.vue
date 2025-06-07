@@ -5,200 +5,235 @@ import axios from "axios";
 import { getUserData } from "@/store/auth";
 import type { Question } from "@/types/types";
 
-// Vue Router
+// Router
 const route = useRoute();
 const router = useRouter();
 
-// Reactive variables
+// State
 const question = ref<Question | null>(null);
 const loading = ref(false);
 const error = ref("");
-const code = ref(""); // User's code input
-const submitting = ref(false); // Submission state
-
-const submissionMessage = ref(""); // Success message
-const submissionError = ref(""); // Error message
+const code = ref("");
+const submitting = ref(false);
+const submissionMessage = ref("");
+const submissionError = ref("");
 
 // Fetch question from API
 const fetchQuestion = async () => {
-    loading.value = true;
-    error.value = "";
-    try {
-        const response = await axios.get(`/questions/${route.params.id}`);
-        question.value = response.data;
-        code.value = response.data.startingCode; // Pre-fill code editor
-    } catch (err) {
-        error.value = "Failed to fetch question.";
-    } finally {
-        loading.value = false;
-    }
+  loading.value = true;
+  error.value = "";
+  try {
+    const response = await axios.get(`/questions/${route.params.id}`);
+    question.value = response.data;
+    code.value = response.data.startingCode;
+  } catch (err) {
+    error.value = "Failed to fetch question.";
+  } finally {
+    loading.value = false;
+  }
 };
 
-// Submit answer to API
+// Handle file upload
+const handleFileUpload = (event: Event) => {
+  const file = (event.target as HTMLInputElement)?.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    code.value = e.target?.result as string;
+  };
+  reader.readAsText(file);
+};
+
+// Submit to backend
 const submitAnswer = async () => {
-    const userData = getUserData();
-    
-    // Ensure userData is not null before accessing token
-    if (!userData || !userData.token) {
-        submissionError.value = "You must be logged in to submit an answer.";
-        return;
-    }
+  const userData = getUserData();
+  if (!userData || !userData.token) {
+    submissionError.value = "You must be logged in to submit an answer.";
+    return;
+  }
 
-    const token = userData.token; // Get token from localStorage
+  submitting.value = true;
+  submissionMessage.value = "";
+  submissionError.value = "";
 
-    submitting.value = true;
-    submissionError.value = "";
-    submissionMessage.value = "";
-
-    console.log("Token being sent:", token); // Debugging token presence
-
-    try {
-        await axios.post(
-            "http://localhost:5000/answers",
-            {
-                question_id: question.value?.id,
-                answerCode: code.value, // Fix reference to user input
-                result: null, // Backend will process this
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`, // Send token
-                },
-            }
-        );
-
-        submissionMessage.value = "Answer submitted successfully!";
-    } catch (err) {
-        submissionError.value = "Failed to submit answer.";
-    } finally {
-        submitting.value = false;
-    }
+  try {
+    await axios.post(
+      "http://localhost:5000/answers",
+      {
+        question_id: question.value?.id,
+        answerCode: code.value,
+        result: null,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      }
+    );
+    submissionMessage.value = "Answer submitted successfully!";
+  } catch (err) {
+    submissionError.value = "Failed to submit answer.";
+  } finally {
+    submitting.value = false;
+  }
 };
 
-
-// Fetch the question when component is mounted
 onMounted(fetchQuestion);
 </script>
 
 <template>
-    <div class="question-container">
-        <button @click="router.push('/view-question-list')">← Back to List</button>
+  <div class="answer-page">
+    <button @click="router.push('/view-question-list')" style="margin-bottom: 16px;">← Back to List</button>
 
-        <div v-if="loading" class="loading">Loading question...</div>
-        <div v-if="error" class="error">{{ error }}</div>
+    <div v-if="loading" class="loading">Loading question...</div>
+    <div v-else-if="error" class="error">{{ error }}</div>
 
-        <div v-if="question" class="question-content">
-            <div class="question-card">
-                <h2>{{ question.questionName }}</h2>
-                <p>{{ question.questionDescription }}</p>
-                <p class="hint">Hint: {{ question.hint }}</p>
-            </div>
+    <div v-else-if="question">
+      <h2 class="heading">Question: {{ question.questionName }}</h2>
 
-            <div class="code-editor">
-                <label for="code">Your Code:</label>
-                <textarea id="code" v-model="code" rows="10"></textarea>
-            </div>
+      <div class="question-box">
+        <p><strong>Name:</strong> {{ question.questionName }}</p>
+        <p><strong>Description:</strong> {{ question.questionDescription }}</p>
+        <p><strong>Hint:</strong> {{ question.hint }}</p>
+        <p><strong>Example Input:</strong> {{ question.exampleInput }}</p>
+        <p><strong>Example Output:</strong> {{ question.exampleOutput }}</p>
 
-            <button class="submit-btn" :disabled="submitting" @click="submitAnswer">
-                {{ submitting ? "Submitting..." : "Submit Answer" }}
-            </button>
+        <div class="code-upload">
+          <textarea
+            v-model="code"
+            class="code-area"
+            placeholder="Upload code here or write it..."
+            rows="8"
+          ></textarea>
 
-            <div v-if="submissionMessage" class="success">{{ submissionMessage }}</div>
-            <div v-if="submissionError" class="error">{{ submissionError }}</div>
+          <label class="upload-label" for="fileUpload">Upload Code</label>
+          <input
+            id="fileUpload"
+            type="file"
+            accept=".txt,.js,.ts,.py,.java,.cpp,.c"
+            @change="handleFileUpload"
+            class="hidden-file"
+          />
         </div>
+      </div>
+
+      <button class="submit-button" :disabled="submitting" @click="submitAnswer">
+        {{ submitting ? "Submitting..." : "Submit" }}
+      </button>
+
+      <div v-if="submissionMessage" class="success">{{ submissionMessage }}</div>
+      <div v-if="submissionError" class="error">{{ submissionError }}</div>
     </div>
+  </div>
 </template>
 
 <style scoped>
-.question-container {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    text-align: left;
-    font-family: Arial, sans-serif;
+.answer-page {
+  max-width: 480px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
 }
 
-button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 15px;
-    transition: background 0.2s ease-in-out;
+.heading {
+  color: #f57c00;
+  font-weight: bold;
+  margin-bottom: 30px;
+  font-size: 24px;
 }
 
-button:hover {
-    background: #0056b3;
+.question-box {
+  border: 1px solid #f57c00;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.question-box p {
+  margin: 10px 0;
+  font-size: 15px;
+}
+
+.code-upload {
+  background-color: #fcd8b2;
+  border-radius: 10px;
+  margin-top: 15px;
+  padding: 10px;
+  position: relative;
+}
+
+.code-area {
+  width: 100%;
+  border: none;
+  background: transparent;
+  resize: vertical;
+  min-height: 120px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
+
+.code-area::placeholder {
+  color: #efb07e;
+  font-weight: 500;
+  text-align: center;
+}
+
+.upload-label {
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #f57c00;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-label:hover {
+  background-color: #e06600;
+}
+
+.hidden-file {
+  display: none;
+}
+
+.submit-button {
+  background-color: #f57c00;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.submit-button:hover {
+  background-color: #e06600;
 }
 
 .loading {
-    font-size: 16px;
-    color: #666;
-}
-
-.error {
-    color: red;
-    font-size: 16px;
-    margin-top: 10px;
+  text-align: center;
+  font-size: 16px;
+  color: #666;
 }
 
 .success {
-    color: green;
-    font-size: 16px;
-    margin-top: 10px;
+  color: green;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
-.question-card {
-    padding: 15px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-.question-card h2 {
-    margin: 0 0 10px;
-    font-size: 24px;
-    color: #222;
-}
-
-.question-card p {
-    font-size: 16px;
-    color: #555;
-}
-
-.question-card .hint {
-    font-style: italic;
-    color: #888;
-    margin-top: 10px;
-}
-
-.code-editor {
-    margin-bottom: 15px;
-}
-
-.code-editor label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.code-editor textarea {
-    width: 100%;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 14px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: vertical;
-}
-
-.submit-btn {
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
+.error {
+  color: red;
+  font-size: 16px;
+  margin-top: 10px;
 }
 </style>

@@ -6,11 +6,13 @@ export async function up(knex: Knex): Promise<void> {
     table.string("questionName").notNullable();
     table.text("questionDescription").notNullable();
     table.text("hint").nullable();
+    table.text("exampleInput").nullable();
+    table.text("exampleOutput").nullable();
     table.text("startingCode").notNullable();
     table.text("correctAnswerCode").notNullable();
     table.string("estimatedRuntime").nullable();
     table.string("timeComplexity").nullable();
-    table.timestamps(true, true); // Adds created_at & updated_at
+    table.timestamps(true, true); // created_at & updated_at
   });
 }
 

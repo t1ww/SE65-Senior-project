@@ -6,7 +6,10 @@ const router = Router();
 // Get all questions (without test cases)
 router.get("/", async (req: Request, res: Response): Promise<any> => {
   try {
-    const [rows] = await pool.query("SELECT * FROM questions");
+    const [rows] = await pool.query(
+      "SELECT id, questionName, questionDescription FROM questions"
+    );
+
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: "Database error" });
@@ -17,7 +20,10 @@ router.get("/", async (req: Request, res: Response): Promise<any> => {
 router.get("/:id", async (req: Request, res: Response): Promise<any> => {
   const { id } = req.params;
   try {
-    const [questions]: any = await pool.query("SELECT * FROM questions WHERE id = ?", [id]);
+    const [questions]: any = await pool.query(
+      "SELECT * FROM questions WHERE id = ?",
+      [id]
+    );
     if (questions.length === 0) {
       return res.status(404).json({ error: "Question not found" });
     }
@@ -39,20 +45,32 @@ router.post("/", async (req: Request, res: Response): Promise<any> => {
     questionName,
     questionDescription,
     hint,
+    exampleInput,
+    exampleOutput,
     startingCode,
     correctAnswerCode,
     testCases,
     estimatedRuntime,
-    timeComplexity
+    timeComplexity,
   } = req.body;
 
   try {
     // Insert into questions table (no testCases field anymore)
     const [result]: any = await pool.query(
       `INSERT INTO questions 
-       (questionName, questionDescription, hint, startingCode, correctAnswerCode, estimatedRuntime, timeComplexity) 
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [questionName, questionDescription, hint, startingCode, correctAnswerCode, estimatedRuntime, timeComplexity]
+ (questionName, questionDescription, hint, exampleInput, exampleOutput, startingCode, correctAnswerCode, estimatedRuntime, timeComplexity)
+ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        questionName,
+        questionDescription,
+        hint,
+        exampleInput,
+        exampleOutput,
+        startingCode,
+        correctAnswerCode,
+        estimatedRuntime,
+        timeComplexity,
+      ]
     );
     const questionId = result.insertId;
 
@@ -74,14 +92,19 @@ router.post("/", async (req: Request, res: Response): Promise<any> => {
       questionName,
       questionDescription,
       hint,
+      exampleInput,
+      exampleOutput,
       startingCode,
       correctAnswerCode,
       estimatedRuntime,
       timeComplexity,
-      testCases
+      testCases,
     });
   } catch (err) {
-    res.status(500).json({ error: "Failed to create question", details: (err as any).message });
+    res.status(500).json({
+      error: "Failed to create question",
+      details: (err as any).message,
+    });
   }
 });
 
@@ -92,19 +115,32 @@ router.put("/:id", async (req: Request, res: Response): Promise<any> => {
     questionName,
     questionDescription,
     hint,
+    exampleInput,
+    exampleOutput,
     startingCode,
     correctAnswerCode,
     testCases,
     estimatedRuntime,
-    timeComplexity
+    timeComplexity,
   } = req.body;
 
   try {
     const [result]: any = await pool.query(
       `UPDATE questions 
-       SET questionName = ?, questionDescription = ?, hint = ?, startingCode = ?, correctAnswerCode = ?, estimatedRuntime = ?, timeComplexity = ?
+       SET questionName = ?, questionDescription = ?, hint = ?, exampleInput = ?, exampleOutput = ?, startingCode = ?, correctAnswerCode = ?, estimatedRuntime = ?, timeComplexity = ?
        WHERE id = ?`,
-      [questionName, questionDescription, hint, startingCode, correctAnswerCode, estimatedRuntime, timeComplexity, id]
+      [
+        questionName,
+        questionDescription,
+        hint,
+        exampleInput,
+        exampleOutput,
+        startingCode,
+        correctAnswerCode,
+        estimatedRuntime,
+        timeComplexity,
+        id,
+      ]
     );
 
     if (result.affectedRows === 0) {
@@ -126,7 +162,10 @@ router.put("/:id", async (req: Request, res: Response): Promise<any> => {
 
     res.json({ message: "Question updated successfully" });
   } catch (err) {
-    res.status(500).json({ error: "Failed to update question", details: (err as any).message });
+    res.status(500).json({
+      error: "Failed to update question",
+      details: (err as any).message,
+    });
   }
 });
 
@@ -134,13 +173,19 @@ router.put("/:id", async (req: Request, res: Response): Promise<any> => {
 router.delete("/:id", async (req: Request, res: Response): Promise<any> => {
   const { id } = req.params;
   try {
-    const [result]: any = await pool.query("DELETE FROM questions WHERE id = ?", [id]);
+    const [result]: any = await pool.query(
+      "DELETE FROM questions WHERE id = ?",
+      [id]
+    );
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Question not found" });
     }
     res.json({ message: "Question deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: "Failed to delete question", details: (err as any).message });
+    res.status(500).json({
+      error: "Failed to delete question",
+      details: (err as any).message,
+    });
   }
 });
 

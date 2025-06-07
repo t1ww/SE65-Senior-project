@@ -12,7 +12,6 @@ import ViewQuestion from "@/pages/ViewQuestion.vue";
 import ViewQuestionsList from "./pages/ViewQuestionsList.vue";
 import Lecture from "./pages/Lecture.vue";
 import TestCase from "./pages/TestCase.vue";
-import Answer from "./pages/Answer.vue";
 import Review from "./pages/Review.vue";
 
 /**
@@ -62,7 +61,6 @@ const routes = [
     component: TestCase,
     meta: { hidden: true },
   },
-  { name: "Answer", path: "/answer", component: Answer },
   { name: "Review", path: "/review", component: Review },
 ];
 
