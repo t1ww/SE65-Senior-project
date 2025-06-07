@@ -9,14 +9,13 @@ import Register from "@/pages/Register.vue";
 import CreateQuestion from "@/pages/CreateQuestion.vue";
 import ViewQuestion from "@/pages/ViewQuestion.vue";
 
-import ViewQuestionsList from "./pages/ViewQuestionsList.vue";
-import Lecture from "./pages/Lecture.vue";
-import TestCase from "./pages/TestCase.vue";
-import Review from "./pages/Review.vue";
-import ViewTest from "./pages/Viewtest.vue";
-import EditQuestion from "./pages/EditQuestion.vue";
-import EditTestCase from "./pages/EditTestCase.vue";
-
+import ViewQuestionsList from "@/pages/ViewQuestionsList.vue";
+import Lecture from "@/pages/Lecture.vue";
+import TestCase from "@/pages/TestCase.vue";
+import Review from "@/pages/Review.vue";
+import ViewTest from "@/pages/ViewTest.vue";
+import EditQuestion from "@/pages/EditQuestion.vue";
+import EditTestCase from "@/pages/EditTestCase.vue";
 
 /**
  * Meta Field Usage:
@@ -68,7 +67,7 @@ const routes = [
   { name: "Review", path: "/review", component: Review },
   { name: "ViewTest", path: "/view-test", component: ViewTest },
   { name: "EditQuestion", path: "/edit-question", component: EditQuestion },
-  { name: "EdittestCase", path: "/edit-test-case", component: EditTestCase },
+  { name: "EditTestCase", path: "/edit-test-case", component: EditTestCase },
 ];
 
 const router = createRouter({
