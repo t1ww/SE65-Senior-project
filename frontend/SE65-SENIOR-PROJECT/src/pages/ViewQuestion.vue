@@ -4,7 +4,9 @@ import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { getUserData, isAuthenticated } from "@/store/auth";
 import type { Question } from "@/types/types";
-
+import dotenv from "dotenv";
+dotenv.config({ path: '.env.dev' });
+const TS_CODE_RUNNER_PORT = process.env.TS_CODE_RUNNER_PORT;
 // Router
 const route = useRoute();
 const router = useRouter();
@@ -79,7 +81,7 @@ const submitAnswer = async () => {
   console.log(question.value.testCases);
   // Sending request
   try {
-    const res = await axios.post("http://localhost:3000/run", payload, {
+    const res = await axios.post(`http://localhost:${TS_CODE_RUNNER_PORT}/run`, payload, {
       headers: {
         Authorization: `Bearer ${userData.token}`,
       },

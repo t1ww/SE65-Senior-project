@@ -10,8 +10,8 @@
     "ts-code-runner"
   ],
   "scripts": {
-    "be": "npm run dev --prefix backend",
-    "fe": "npm run dev --prefix frontend/SE65-SENIOR-PROJECT",
+    "be": "dotenv -e .env.dev -- npm run dev --prefix backend",
+    "fe": "dotenv -e .env.dev -- npm run dev --prefix frontend/SE65-SENIOR-PROJECT",
     "backend": "npm run be",
     "frontend": "npm run fe",
     "ts-code-runner": "npm run dev --prefix ts-code-runner",
@@ -29,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/t1ww/SE65-Senior-project/issues"
   },
-  "homepage": "https://github.com/t1ww/SE65-Senior-project#readme"
+  "homepage": "https://github.com/t1ww/SE65-Senior-project#readme",
+  "devDependencies": {
+    "dotenv-cli": "^8.0.0"
+  }
 }
