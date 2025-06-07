@@ -30,21 +30,21 @@ router.get("/:id", async (req: Request, res: Response): Promise<any> => {
 
 // POST a new answer (authenticated)
 router.post("/", authenticateToken, async (req: AuthRequest, res: Response): Promise<any> => {
-  const { question_id, answerCode, result } = req.body;
-  // Assume that user_id is available from the token (set by your auth middleware)
-  const user_id = req.user?.userId;
-  if (!user_id) {
+  const { question_id: questionId, answerCode, result } = req.body;
+  // Assume that userId is available from the token (set by your auth middleware)
+  const userId = req.user?.userId;
+  if (!userId) {
     return res.status(401).json({ error: "Unauthorized" });
   }
   try {
     const [queryResult]: any = await pool.query(
-      "INSERT INTO answers (question_id, user_id, answerCode, result) VALUES (?, ?, ?, ?)",
-      [question_id, user_id, answerCode, result || null]
+      "INSERT INTO answers (questionId, userId, answerCode, result) VALUES (?, ?, ?, ?)",
+      [questionId, userId, answerCode, result || null]
     );
     res.status(201).json({
       id: queryResult.insertId,
-      question_id,
-      user_id,
+      questionId: questionId,
+      userId: userId,
       answerCode,
       result: result || null,
       submittedAt: new Date()

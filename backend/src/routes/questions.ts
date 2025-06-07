@@ -30,7 +30,7 @@ router.get("/:id", async (req: Request, res: Response): Promise<any> => {
     const question = questions[0];
     // Fetch test cases linked to the question, ordered by the `order` column
     const [testCases]: any = await pool.query(
-      "SELECT * FROM test_cases WHERE question_id = ? ORDER BY `order` ASC",
+      "SELECT * FROM test_cases WHERE questionId = ? ORDER BY `order` ASC",
       [id]
     );
     res.json({ ...question, testCases });
@@ -77,12 +77,12 @@ router.post("/", async (req: Request, res: Response): Promise<any> => {
     // Insert each test case into test_cases table
     if (Array.isArray(testCases) && testCases.length > 0) {
       for (const tc of testCases) {
-        // Expecting each test case object to provide input, expected_output, description (optional) and order (optional)
-        const { input, expected_output, description, order = 0 } = tc;
+        // Expecting each test case object to provide input, expectedOutput, description (optional) and order (optional)
+        const { input, expectedOutput, description, order = 0 } = tc;
         await pool.query(
-          `INSERT INTO test_cases (question_id, input, expected_output, description, \`order\`) 
+          `INSERT INTO test_cases (questionId, input, expectedOutput, description, \`order\`) 
            VALUES (?, ?, ?, ?, ?)`,
-          [questionId, input, expected_output, description, order]
+          [questionId, input, expectedOutput, description, order]
         );
       }
     }
@@ -148,14 +148,14 @@ router.put("/:id", async (req: Request, res: Response): Promise<any> => {
     }
 
     // Update test cases: delete existing entries and re-insert new ones
-    await pool.query("DELETE FROM test_cases WHERE question_id = ?", [id]);
+    await pool.query("DELETE FROM test_cases WHERE questionId = ?", [id]);
     if (Array.isArray(testCases) && testCases.length > 0) {
       for (const tc of testCases) {
-        const { input, expected_output, description, order = 0 } = tc;
+        const { input, expectedOutput, description, order = 0 } = tc;
         await pool.query(
-          `INSERT INTO test_cases (question_id, input, expected_output, description, \`order\`)
+          `INSERT INTO test_cases (questionId, input, expectedOutput, description, \`order\`)
            VALUES (?, ?, ?, ?, ?)`,
-          [id, input, expected_output, description, order]
+          [id, input, expectedOutput, description, order]
         );
       }
     }
