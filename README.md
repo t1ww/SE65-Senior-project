@@ -71,6 +71,17 @@ Make sure you're in backend folder
 
 ---
 
+# To reset database run this
+(Be warned, doing this data will all be deleted, to keep data, write a new migration file to update existing tables)
+
+`cd backend`
+
+`npx knex migrate:rollback --all`
+
+`npx knex migrate:latest`
+
+---
+
 # Backend Explained
 
 <details>

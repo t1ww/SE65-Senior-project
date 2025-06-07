@@ -4,14 +4,14 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable("answers", (table) => {
     table.increments("id").primary();
     table
-      .integer("question_id")
+      .integer("questionId")
       .unsigned()
       .notNullable()
       .references("id")
       .inTable("questions")
       .onDelete("CASCADE");
     table
-      .integer("user_id")
+      .integer("userId")
       .unsigned()
       .notNullable()
       .references("id")
