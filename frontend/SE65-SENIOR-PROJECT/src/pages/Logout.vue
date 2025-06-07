@@ -6,4 +6,3 @@ onMounted(() => {
   logoutUser();
 });
 </script>
-1

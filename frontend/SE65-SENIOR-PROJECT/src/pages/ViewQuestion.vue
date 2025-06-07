@@ -127,7 +127,7 @@ onMounted(fetchQuestion);
         <p><strong>Example Input:</strong> {{ question.exampleInput }}</p>
         <p><strong>Example Output:</strong> {{ question.exampleOutput }}</p>
         <p>
-          <strong>Extimated Runtime:</strong> {{ question.estimatedRuntime }}
+          <strong>Estimated Runtime:</strong> {{ question.estimatedRuntime }}
         </p>
         <p>
           <strong>Time Complexity O(n):</strong> {{ question.timeComplexity }}
