@@ -97,6 +97,8 @@ onMounted(fetchQuestion);
         <p><strong>Hint:</strong> {{ question.hint }}</p>
         <p><strong>Example Input:</strong> {{ question.exampleInput }}</p>
         <p><strong>Example Output:</strong> {{ question.exampleOutput }}</p>
+        <p><strong>Extimated Runtime:</strong> {{ question.estimatedRuntime }}</p>
+        <p><strong>Time Complexity O(n):</strong> {{ question.timeComplexity }}</p>
 
         <div class="code-upload">
           <textarea

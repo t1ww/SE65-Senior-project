@@ -12,3 +12,16 @@ export interface TeamMember {
   email: string
   image: string
 }
+export interface Question {
+    id: number;
+    questionName: string;
+    questionDescription: string;
+    hint: string;
+    exampleInput: string;
+    exampleOutput: string;
+    startingCode: string;
+    correctAnswerCode: string;
+    testCases: { input: string; output: string }[];
+    estimatedRuntime: string;
+    timeComplexity: string;
+}
