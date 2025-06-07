@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-import { getUserData } from "@/store/auth";
+import { getUserData, isAuthenticated } from "@/store/auth"
 import type { Question } from "@/types/types";
 
 // Router
@@ -26,6 +26,7 @@ const fetchQuestion = async () => {
     const response = await axios.get(`/questions/${route.params.id}`);
     question.value = response.data;
     code.value = response.data.startingCode;
+    console.log(question.value)
   } catch (err) {
     error.value = "Failed to fetch question.";
   } finally {
@@ -47,8 +48,16 @@ const handleFileUpload = (event: Event) => {
 // Submit to backend
 const submitAnswer = async () => {
   const userData = getUserData();
-  if (!userData || !userData.token) {
+  if (!isAuthenticated.value) {
     submissionError.value = "You must be logged in to submit an answer.";
+    return;
+  }
+  if (userData == null) {
+    submissionError.value = "Your logged in account is null, please try re-login.";
+    return;
+  }
+  if (question.value == null) {
+    submissionError.value = "question.value is null, please try again later.";
     return;
   }
 
@@ -56,13 +65,16 @@ const submitAnswer = async () => {
   submissionMessage.value = "";
   submissionError.value = "";
 
+  console.log("Submitting code:");
+  console.log(code.value);
+  console.log("testCases:");
+  console.log(question.value.testCases);
   try {
     await axios.post(
-      "http://localhost:5000/answers",
+      "http://localhost:3000/run",
       {
-        question_id: question.value?.id,
-        answerCode: code.value,
-        result: null,
+        code: code.value,
+        testCases: question.value.testCases,
       },
       {
         headers: {
@@ -72,7 +84,7 @@ const submitAnswer = async () => {
     );
     submissionMessage.value = "Answer submitted successfully!";
   } catch (err) {
-    submissionError.value = "Failed to submit answer.";
+    submissionError.value = "Failed to submit answer. : " + err;
   } finally {
     submitting.value = false;
   }
