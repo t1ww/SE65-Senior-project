@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, watch, onMounted } from "vue";
 import type { Question } from "@/types/types";
+
+const STORAGE_KEY = "questionData";
 
 const question = reactive<Question>({
   id: 0,
@@ -15,6 +17,24 @@ const question = reactive<Question>({
   estimatedRuntime: "",
   timeComplexity: "",
 });
+
+// Load from localStorage on mount
+onMounted(() => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    Object.assign(question, parsed);
+  }
+});
+
+// Save to localStorage on change
+watch(
+  question,
+  (newVal) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newVal));
+  },
+  { deep: true }
+);
 
 const submitQuestion = () => {
   console.log(question);

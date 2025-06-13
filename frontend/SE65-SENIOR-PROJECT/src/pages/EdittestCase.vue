@@ -3,14 +3,27 @@ import { ref, computed, onMounted, watch } from "vue";
 
 const itemsPerPage = 2;
 
+const correctCode = ref("");
+
+// Load Correct Code
+const loadCorrectCode = () => {
+  const storedCorrectCode = localStorage.getItem("correctCode");
+  return storedCorrectCode ? storedCorrectCode : "";
+};
+
+// Save Correct Code
+const saveCorrectCode = () => {
+  localStorage.setItem("correctCode", correctCode.value);
+};
+
 // Load test cases from local storage or initialize
 const loadTestCases = () => {
   const storedTestCases = localStorage.getItem("testCases");
   if (storedTestCases) {
     const parsed = JSON.parse(storedTestCases);
-    return parsed.length > 0 ? parsed : [{ input: "", output: "", correctCode: "" }];
+    return parsed.length > 0 ? parsed : [{ input: "", output: ""}];
   }
-  return [{ input: "", output: "", correctCode: "" }];
+  return [{ input: "", output: "" }];
 };
 
 const saveTestCases = () => {
@@ -81,10 +94,19 @@ watch(
   { deep: true }
 );
 
+watch(
+  () => correctCode.value,
+  () => {
+    saveCorrectCode();
+  }
+);
+
 onMounted(() => {
   questionData.value.testCases = loadTestCases();
   currentPage.value = loadCurrentPage();
+  correctCode.value = loadCorrectCode();
 });
+
 </script>
 
 <template>
@@ -95,7 +117,13 @@ onMounted(() => {
       </div>
 
       <h3>Edit Test Cases</h3>
-
+      <div class="input-wrapper">
+            <label>Correct Answer Code:</label>
+            <textarea
+              v-model="correctCode"
+              placeholder="Enter correct answer code"
+            />
+          </div>
       <div class="test-case-list">
         <div
           v-for="(testCase, index) in paginatedTestCases"
@@ -115,14 +143,6 @@ onMounted(() => {
           <div class="input-wrapper">
             <label>Output:</label>
             <input v-model="testCase.output" placeholder="Enter expected output" />
-          </div>
-
-          <div class="input-wrapper">
-            <label>Correct Answer Code:</label>
-            <textarea
-              v-model="testCase.correctCode"
-              placeholder="Enter correct answer code"
-            />
           </div>
         </div>
       </div>

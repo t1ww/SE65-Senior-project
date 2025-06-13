@@ -8,13 +8,21 @@ const loadTestCases = () => {
   const storedTestCases = localStorage.getItem("testCases");
   if (storedTestCases) {
     const parsed = JSON.parse(storedTestCases);
-    return parsed.length > 0 ? parsed : [{ input: "", output: "", correctCode: "" }];
+    return parsed.length > 0 ? parsed : [{ input: "", output: "" }];
   }
-  return [{ input: "", output: "", correctCode: "" }];
+  return [{ input: "", output: "" }];
+};
+
+const loadCorrectCode = () => {
+  return localStorage.getItem("correctCode") || "";
 };
 
 const saveTestCases = () => {
   localStorage.setItem("testCases", JSON.stringify(questionData.value.testCases));
+};
+
+const saveCorrectCode = () => {
+  localStorage.setItem("correctCode", correctCode.value);
 };
 
 const loadCurrentPage = () => {
@@ -29,6 +37,8 @@ const saveCurrentPage = () => {
 const questionData = ref({
   testCases: loadTestCases(),
 });
+
+const correctCode = ref(loadCorrectCode());
 
 const currentPage = ref(loadCurrentPage());
 
@@ -53,7 +63,7 @@ const prevPage = () => {
 };
 
 const addTestCase = () => {
-  questionData.value.testCases.push({ input: "", output: "", correctCode: "" });
+  questionData.value.testCases.push({ input: "", output: "" });
   saveTestCases();
 
   if (questionData.value.testCases.length > (currentPage.value + 1) * itemsPerPage) {
@@ -81,8 +91,13 @@ watch(
   { deep: true }
 );
 
+watch(correctCode, () => {
+  saveCorrectCode();
+});
+
 onMounted(() => {
   questionData.value.testCases = loadTestCases();
+  correctCode.value = loadCorrectCode();
   currentPage.value = loadCurrentPage();
 });
 </script>
@@ -112,12 +127,12 @@ onMounted(() => {
             <label>Output:</label>
             <input v-model="testCase.output" placeholder="Enter expected output" />
           </div>
-
-          <div class="input-wrapper">
-            <label>Correct Answer Code:</label>
-            <textarea v-model="correctCode" placeholder="Enter correct answer code" />
-          </div>
         </div>
+      </div>
+
+      <div class="input-wrapper">
+        <label>Correct Answer Code:</label>
+        <textarea v-model="correctCode" placeholder="Enter correct answer code"></textarea>
       </div>
 
       <div class="add-button">
