@@ -1,0 +1,17 @@
+Improvement	                    |   Why?
+------------------------------- | --------------------------------------------------
+Timeout (setTimeout)	        |   Prevent infinite loops / hangs.
+Promise.allSettled	            |   Each test case runs independently.
+Output size limit	            |   Protect against large/unbounded output.
+Error logs on cleanup	        |   Debug temp file handling issues.
+Proper type for async handler	|   Avoid Express TS warnings.
+Newline on stdin	            |   Ensure C++ cin reads properly.
+
+Note on Docker (Production):
+In real deployment (for safety):
+
+Run code like this inside Docker containers to isolate file, CPU, memory, etc.
+
+Example Docker run for C++:
+    docker run --rm -v /tempdir:/temp gcc:latest g++ /temp/tempfile.cpp -o /temp/exe
+    docker run --rm -v /tempdir:/temp gcc:latest /temp/exe
