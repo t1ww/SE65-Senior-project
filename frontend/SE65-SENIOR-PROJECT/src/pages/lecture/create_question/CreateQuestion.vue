@@ -1,79 +1,65 @@
+<!-- src/pages/lecture/create_question/CreateQuestion.vue -->
 <script setup lang="ts">
-import { reactive } from "vue";
-import type { Question } from "@/types/types";
+import { useQuestionStore } from "@/stores/questionStore";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
-const question = reactive<Question>({
-  id: 0,
-  questionName: "",
-  questionDescription: "",
-  hint: "",
-  exampleInput: "",
-  exampleOutput: "",
-  startingCode: "",
-  correctAnswerCode: "",
-  testCases: [],
-  estimatedRuntime: "",
-  timeComplexity: "",
-});
+const { question, reset } = useQuestionStore();
+const router = useRouter();
 
 const submitQuestion = async () => {
   try {
-    const response = await axios.post("http://localhost:5000/questions", question);
+    const response = await axios.post(
+      "http://localhost:5000/questions",
+      question
+    );
     console.log("Question posted successfully:", response.data);
-    return response.data;
+    reset();                  // clear form after success
+    router.push("/view-question-list");
   } catch (error: any) {
     console.error("Error posting question:", error.response?.data || error.message);
-    throw error;
   }
 };
 </script>
 
 <template>
   <div class="container">
-    <br>
     <h2>Create Question</h2>
     <form @submit.prevent="submitQuestion">
       <div class="input-group">
-        <label for="name">Name:</label>
-        <input v-model="question.questionName" type="text" required />
+        <label>Name:</label>
+        <input v-model="question.questionName" required />
       </div>
-
       <div class="input-group">
-        <label for="description">Description:</label>
+        <label>Description:</label>
         <input v-model="question.questionDescription" required />
       </div>
-
       <div class="input-group">
-        <label for="hint">Hint:</label>
-        <input v-model="question.hint" required />
+        <label>Hint:</label>
+        <input v-model="question.hint" />
+      </div>
+      <div class="input-group">
+        <label>Example Input:</label>
+        <input v-model="question.exampleInput" />
+      </div>
+      <div class="input-group">
+        <label>Example Output:</label>
+        <input v-model="question.exampleOutput" />
+      </div>
+      <div class="input-group">
+        <label>Estimated Runtime:</label>
+        <input v-model="question.estimatedRuntime" />
+      </div>
+      <div class="input-group">
+        <label>Time Complexity:</label>
+        <input v-model="question.timeComplexity" />
       </div>
 
       <div class="input-group">
-        <label for="exampleInput">Example Input:</label>
-        <input v-model="question.exampleInput" required />
+        <router-link to="/test-case">Configure Test Cases</router-link>
       </div>
 
-      <div class="input-group">
-        <label for="exampleOutput">Example Output:</label>
-        <input v-model="question.exampleOutput" required />
-      </div>
-
-      <div class="input-group">
-        <label for="estimatedRuntime">Estimated Runtime:</label>
-        <input v-model="question.estimatedRuntime" required />
-      </div>
-
-      <div class="input-group">
-        <label for="timeComplexity">Time Complexity:</label>
-        <input v-model="question.timeComplexity" required />
-      </div>
-
-      <div class="input-group">
-        <router-link to="/test-case">View Test Case</router-link>
-      </div>
-
-      <button type="submit">Submit</button>
+      <button type="submit">Submit Question</button>
     </form>
   </div>
 </template>
@@ -82,9 +68,15 @@ const submitQuestion = async () => {
 h2 {
   color: #ff9233;
 }
+a {
+  color: #ff9233;
+  text-decoration: underline;
+}
+
 .container {
   max-width: 600px;
   margin: auto;
+  margin-top: 2rem;
   padding: 20px;
   display: flex;
   flex-direction: column;
