@@ -90,9 +90,10 @@ const submitAnswer = async () => {
     console.log("Run Result:", result);
 
     // You can display part of the result or store it in a reactive variable
-    submissionMessage.value =
-      result.message || "Answer submitted successfully!";
+    submissionMessage.value = result.message || "Answer submitted successfully!";
     resultOutput.value = result.output;
+    testResults.value = result.results || [];
+    showResultsModal.value = true;
   } catch (err: any) {
     console.error("Submission Error:", err);
     submissionError.value =
@@ -102,15 +103,18 @@ const submitAnswer = async () => {
   }
 };
 
+// Show results
+const showResultsModal = ref(false);
+const testResults = ref<
+  { input: string; output: string; expected: string; passed: boolean }[]
+>([]);
+
 onMounted(fetchQuestion);
 </script>
 
 <template>
   <div class="answer-page">
-    <button
-      @click="router.push('/view-question-list')"
-      style="margin-bottom: 16px"
-    >
+    <button @click="router.push('/view-question-list')" style="margin-bottom: 16px">
       ← Back to List
     </button>
 
@@ -134,29 +138,15 @@ onMounted(fetchQuestion);
         </p>
 
         <div class="code-upload">
-          <textarea
-            v-model="code"
-            class="code-area"
-            placeholder="Upload code here or write it..."
-            rows="8"
-          ></textarea>
+          <textarea v-model="code" class="code-area" placeholder="Upload code here or write it..." rows="8"></textarea>
 
           <label class="upload-label" for="fileUpload">Upload Code</label>
-          <input
-            id="fileUpload"
-            type="file"
-            accept=".txt,.js,.ts,.py,.java,.cpp,.c"
-            @change="handleFileUpload"
-            class="hidden-file"
-          />
+          <input id="fileUpload" type="file" accept=".txt,.js,.ts,.py,.java,.cpp,.c" @change="handleFileUpload"
+            class="hidden-file" />
         </div>
       </div>
 
-      <button
-        class="submit-button"
-        :disabled="submitting"
-        @click="submitAnswer"
-      >
+      <button class="submit-button" :disabled="submitting" @click="submitAnswer">
         {{ submitting ? "Submitting..." : "Submit" }}
       </button>
 
@@ -164,13 +154,34 @@ onMounted(fetchQuestion);
         {{ submissionMessage }}
       </div>
       <div v-if="submissionError" class="error">{{ submissionError }}</div>
+
+      <!-- Submission resuts -->
+      <div v-if="showResultsModal" class="modal-backdrop" @click.self="showResultsModal = false">
+        <div class="modal-content">
+          <h3>Test Case Results</h3>
+          <ul>
+            <li v-for="(result, index) in testResults" :key="index" :class="result.passed ? 'pass' : 'fail'">
+              <p><strong>Input:</strong> {{ result.input }}</p>
+              <p><strong>Output:</strong> {{ result.output }}</p>
+              <p><strong>Expected:</strong> {{ result.expected }}</p>
+              <p><strong>Status:</strong>
+                <span :style="{ color: result.passed ? 'green' : 'red' }">
+                  {{ result.passed ? "✔ Passed" : "✖ Failed" }}
+                </span>
+              </p>
+            </li>
+          </ul>
+          <button @click="showResultsModal = false">Close</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
 .answer-page {
-  max-width: 480px;
+  max-width: 50rem;
   margin: 60px auto;
   padding: 20px;
   text-align: center;
@@ -275,6 +286,69 @@ onMounted(fetchQuestion);
 .error {
   color: red;
   font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Submission results */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #f57c00;
+}
+
+.modal-content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.modal-content li {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  background-color: #f5f5f5;
+  border-left: 5px solid transparent;
+}
+
+.modal-content li.pass {
+  border-color: #4caf50;
+}
+
+.modal-content li.fail {
+  border-color: #f44336;
+}
+
+.modal-content button {
+  background-color: #f57c00;
+  color: white;
+  font-weight: bold;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
   margin-top: 10px;
 }
 </style>
