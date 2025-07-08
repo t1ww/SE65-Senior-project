@@ -5,17 +5,18 @@ import Home from "@/pages/Home.vue";
 import About from "@/pages/About.vue";
 import Login from "@/pages/auth/Login.vue";
 import Logout from "@/pages/auth/Logout.vue";
-import Register from "@/pages/auth/Register.vue";
-import CreateQuestion from "@/pages/questions/CreateQuestion.vue";
+import UploadStudent from "@/pages/lecture/UploadStudent.vue";
+import CreateQuestion from "@/pages/lecture/CreateQuestion.vue";
 import ViewQuestion from "@/pages/questions/ViewQuestion.vue";
 
 import ViewQuestionsList from "@/pages/questions/ViewQuestionsList.vue";
 import Lecture from "@/pages/Lecture.vue";
 import TestCase from "@/pages/questions/TestCase.vue";
-import Review from "@/pages/questions/Review.vue";
+import Review from "@/pages/lecture/Review.vue";
 import ViewTest from "@/pages/ViewTest.vue";
-import EditQuestion from "@/pages/questions/EditQuestion.vue";
-import EditTestCase from "@/pages/questions/EditTestCase.vue";
+import EditQuestion from "@/pages/lecture/EditQuestion.vue";
+import EditTestCase from "@/pages/lecture/EditTestCase.vue";
+import ViewStudentsList from "./pages/lecture/ViewStudentsList.vue";
 
 /**
  * Meta Field Usage:
@@ -36,9 +37,15 @@ const routes = [
   { name: "Login", path: "/login", component: Login, meta: { hideAuth: true } },
   { name: "Logout", path: "/logout", component: Logout, meta: { requiresAuth: true } },
   {
-    name: "Register",
-    path: "/register",
-    component: Register,
+    name: "UploadStudent",
+    path: "/upload-student",
+    component: UploadStudent,
+    meta: { hidden: true },
+  },
+  {
+    name: "ViewStudents",
+    path: "/view-students",
+    component: ViewStudentsList,
     meta: { hidden: true },
   },
 
