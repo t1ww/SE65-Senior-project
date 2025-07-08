@@ -6,7 +6,7 @@ import router from './router'
 import axios from 'axios'
 
 // Auth
-import { isAuthenticated, getUserData } from '@/store/auth'
+import { isAuthenticated, getUserData } from '@/stores/auth'
 
 // Set Axios base URL
 axios.defaults.baseURL = 'http://localhost:5000'

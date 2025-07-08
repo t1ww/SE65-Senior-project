@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import router from "@/router"
-import { getUserData, isAuthenticated } from "@/store/auth"
+import { getUserData, isAuthenticated } from "@/stores/auth"
 
 const filteredRoutes = computed(() => {
   const userRole = getUserData()?.role

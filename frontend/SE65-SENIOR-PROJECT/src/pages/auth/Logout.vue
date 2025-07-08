@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { logoutUser } from "@/store/auth";
+import { logoutUser } from "@/stores/auth";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 

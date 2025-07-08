@@ -21,7 +21,11 @@ export interface Question {
     exampleOutput: string;
     startingCode: string;
     correctAnswerCode: string;
-    testCases: { input: string; expectedOutput: string }[];
+    testCases: TestCase[];
     estimatedRuntime: string;
     timeComplexity: string;
+}
+export interface TestCase {
+    input: string; 
+    expectedOutput: string;
 }

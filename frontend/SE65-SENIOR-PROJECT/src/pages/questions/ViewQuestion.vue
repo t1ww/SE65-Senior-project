@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-import { getUserData, isAuthenticated } from "@/store/auth";
+import { getUserData, isAuthenticated } from "@/stores/auth";
 import type { Question } from "@/types/types";
 
 // Router

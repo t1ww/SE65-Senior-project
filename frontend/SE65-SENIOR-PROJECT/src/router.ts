@@ -6,12 +6,12 @@ import About from "@/pages/About.vue";
 import Login from "@/pages/auth/Login.vue";
 import Logout from "@/pages/auth/Logout.vue";
 import UploadStudent from "@/pages/lecture/UploadStudent.vue";
-import CreateQuestion from "@/pages/lecture/CreateQuestion.vue";
+import CreateQuestion from "@/pages/lecture/create_question/CreateQuestion.vue";
 import ViewQuestion from "@/pages/questions/ViewQuestion.vue";
 
 import ViewQuestionsList from "@/pages/questions/ViewQuestionsList.vue";
 import Lecture from "@/pages/Lecture.vue";
-import TestCase from "@/pages/questions/TestCase.vue";
+import TestCase from "@/pages/lecture/create_question/TestCase.vue";
 import Review from "@/pages/lecture/Review.vue";
 import ViewTest from "@/pages/ViewTest.vue";
 import EditQuestion from "@/pages/lecture/EditQuestion.vue";
