@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import type { Question } from "@/types/types";
+import axios from "axios";
 
 const question = reactive<Question>({
   id: 0,
@@ -16,8 +17,15 @@ const question = reactive<Question>({
   timeComplexity: "",
 });
 
-const submitQuestion = () => {
-  console.log(question);
+const submitQuestion = async () => {
+  try {
+    const response = await axios.post("http://localhost:5000/questions", question);
+    console.log("Question posted successfully:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error posting question:", error.response?.data || error.message);
+    throw error;
+  }
 };
 </script>
 

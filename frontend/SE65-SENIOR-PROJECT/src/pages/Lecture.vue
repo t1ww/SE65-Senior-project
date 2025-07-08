@@ -13,7 +13,7 @@ const navigateTo = (path: string | RouteLocationAsRelativeGeneric | RouteLocatio
       <button @click="navigateTo('/register')">Upload Students</button>
       <button @click="navigateTo('/view-students')">View Students</button>
       <button @click="navigateTo('/create-question')">Create Question</button>
-      <button @click="navigateTo('/view-question-list')">View Questions</button>
+      <button @click="navigateTo('/review')">View Questions</button>
     </div>
   </div>
 </template>

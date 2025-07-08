@@ -1,22 +1,32 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from "vue";
+import type { Question } from "@/types/types";
+import axios from "axios";
 
-// Simulated fetched data
-const name = ref('Q1')
-const description = ref('Find the biggest number')
-const hint = ref('2 5 8 9 = 9')
-const estimatedRuntime = ref('1.2s')
-const timeComplexity = ref('O(n)')
+const question = reactive<Question>({
+  id: 0,
+  questionName: "",
+  questionDescription: "",
+  hint: "",
+  exampleInput: "",
+  exampleOutput: "",
+  startingCode: "",
+  correctAnswerCode: "",
+  testCases: [],
+  estimatedRuntime: "",
+  timeComplexity: "",
+});
 
-const saveChanges = () => {
-  console.log({
-    name: name.value,
-    description: description.value,
-    hint: hint.value,
-    estimatedRuntime: estimatedRuntime.value,
-    timeComplexity: timeComplexity.value,
-  })
-}
+const submitQuestion = async () => {
+  try {
+    const response = await axios.post("http://localhost:5000/questions", question);
+    console.log("Question posted successfully:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error posting question:", error.response?.data || error.message);
+    throw error;
+  }
+};
 </script>
 
 <template>
@@ -26,30 +36,30 @@ const saveChanges = () => {
     </div>
 
     <h2>Edit Question</h2>
-    <form @submit.prevent="saveChanges">
+    <form @submit.prevent="submitQuestion">
       <div class="input-group">
         <label for="name">Name:</label>
-        <input v-model="name" type="text" required />
+        <input v-model="question.questionName" type="text" required />
       </div>
 
       <div class="input-group">
         <label for="description">Description:</label>
-        <input v-model="description" required />
+        <input v-model="question.questionDescription" required />
       </div>
 
       <div class="input-group">
         <label for="hint">Hint:</label>
-        <input v-model="hint" required />
+        <input v-model="question.hint" required />
       </div>
 
       <div class="input-group">
         <label for="estimatedRuntime">Estimated Runtime:</label>
-        <input v-model="estimatedRuntime" required />
+        <input v-model="question.estimatedRuntime" required />
       </div>
 
       <div class="input-group">
         <label for="timeComplexity">Time Complexity:</label>
-        <input v-model="timeComplexity" required />
+        <input v-model="question.timeComplexity" required />
       </div>
 
       <div class="input-group">
@@ -65,6 +75,7 @@ const saveChanges = () => {
 h2 {
   color: #ff9233;
 }
+
 .container {
   max-width: 600px;
   margin: auto;
@@ -74,22 +85,27 @@ h2 {
   gap: 10px;
   text-align: center;
 }
+
 .back-button {
   text-align: left;
   margin-bottom: 10px;
 }
+
 .back-button a {
   color: #f57c00;
   text-decoration: none;
   font-weight: bold;
   font-size: 14px;
 }
+
 .back-button a:hover {
   text-decoration: underline;
 }
+
 label {
   font-weight: bold;
 }
+
 input,
 textarea {
   width: 100%;
@@ -98,6 +114,7 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 input {
   padding: 10px;
   background-color: white;
@@ -106,6 +123,7 @@ input {
   font-size: 14px;
   color: black;
 }
+
 button {
   background-color: #f57c00;
   color: white;
@@ -114,13 +132,16 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+
 button:hover {
   background-color: #0056b3;
 }
+
 .input-group {
   margin-bottom: 15px;
   text-align: left;
 }
+
 textarea {
   height: 100px;
   resize: none;

@@ -3,19 +3,19 @@ import { createRouter, createWebHistory } from "vue-router";
 // Importing all page components
 import Home from "@/pages/Home.vue";
 import About from "@/pages/About.vue";
-import Login from "@/pages/Login.vue";
-import Logout from "@/pages/Logout.vue";
-import Register from "@/pages/Register.vue";
-import CreateQuestion from "@/pages/CreateQuestion.vue";
-import ViewQuestion from "@/pages/ViewQuestion.vue";
+import Login from "@/pages/auth/Login.vue";
+import Logout from "@/pages/auth/Logout.vue";
+import Register from "@/pages/auth/Register.vue";
+import CreateQuestion from "@/pages/questions/CreateQuestion.vue";
+import ViewQuestion from "@/pages/questions/ViewQuestion.vue";
 
-import ViewQuestionsList from "@/pages/ViewQuestionsList.vue";
+import ViewQuestionsList from "@/pages/questions/ViewQuestionsList.vue";
 import Lecture from "@/pages/Lecture.vue";
-import TestCase from "@/pages/TestCase.vue";
-import Review from "@/pages/Review.vue";
+import TestCase from "@/pages/questions/TestCase.vue";
+import Review from "@/pages/questions/Review.vue";
 import ViewTest from "@/pages/ViewTest.vue";
-import EditQuestion from "@/pages/EditQuestion.vue";
-import EditTestCase from "@/pages/EditTestCase.vue";
+import EditQuestion from "@/pages/questions/EditQuestion.vue";
+import EditTestCase from "@/pages/questions/EditTestCase.vue";
 
 /**
  * Meta Field Usage:
@@ -26,21 +26,44 @@ import EditTestCase from "@/pages/EditTestCase.vue";
  * - allowedRoles:   Restrict access to users with specific roles (e.g., professors only).
  */
 const routes = [
-  { name: "Home", path: "/", component: Home },
-  { name: "About", path: "/about", component: About },
+  // Root / home
+  { name: "Home", path: "/", component: Home, meta: { hidden: true } },
+  
+  // Credit
+  { name: "About", path: "/about", component: About, meta: { hidden: true } },
+  
+  // Auth
   { name: "Login", path: "/login", component: Login, meta: { hideAuth: true } },
-  { name: "Logout", path: "/logout", component: Logout, meta: { requiresAuth: true }},
+  { name: "Logout", path: "/logout", component: Logout, meta: { requiresAuth: true } },
   {
     name: "Register",
     path: "/register",
     component: Register,
     meta: { hidden: true },
   },
+
+  // Lecturer's navigation page
+  {
+    name: "Lecture",
+    path: "/lecture",
+    component: Lecture,
+    meta: { requiresAuth: true, allowedRoles: ["professor"] },
+  },
+  
+  // Create questions
   {
     name: "CreateQuestion",
     path: "/create-question",
     component: CreateQuestion,
   },
+  {
+    name: "TestCase",
+    path: "/test-case",
+    component: TestCase,
+    meta: { hidden: true },
+  },
+
+  // View questions and submission
   {
     name: "ViewQuestion",
     path: "/view-question/:id",
@@ -52,22 +75,12 @@ const routes = [
     path: "/view-question-list",
     component: ViewQuestionsList,
   },
-  {
-    name: "Lecture",
-    path: "/lecture",
-    component: Lecture,
-    meta: { requiresAuth: true, allowedRoles: ["professor"] },
-  },
-  {
-    name: "TestCase",
-    path: "/test-case",
-    component: TestCase,
-    meta: { hidden: true },
-  },
-  { name: "Review", path: "/review", component: Review },
-  { name: "ViewTest", path: "/view-test", component: ViewTest },
-  { name: "EditQuestion", path: "/edit-question", component: EditQuestion },
-  { name: "EditTestCase", path: "/edit-test-case", component: EditTestCase },
+
+  // Review and edit questions
+  { name: "Review", path: "/review", component: Review, meta: { hidden: true } },
+  { name: "ViewTest", path: "/view-test", component: ViewTest, meta: { hidden: true } },
+  { name: "EditQuestion", path: "/edit-question", component: EditQuestion, meta: { hidden: true } },
+  { name: "EditTestCase", path: "/edit-test-case", component: EditTestCase, meta: { hidden: true } },
 ];
 
 const router = createRouter({
