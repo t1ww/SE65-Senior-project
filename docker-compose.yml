@@ -1,18 +1,16 @@
-version: '3.9'
-
 services:
-  # backend:
-  #   build:
-  #     context: ./backend
-  #   image: backend
-  #   ports:
-  #     - "10600:5000"
-  #   volumes:
-  #     - ./backend:/app
-  #     - /app/node_modules
-  #   env_file:
-  #     - .env
-  #   command: npm run dev
+  backend:
+    build:
+      context: ./backend
+    image: backend
+    ports:
+      - "10600:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    command: npm run dev
 
   frontend:
     build:
@@ -23,4 +21,15 @@ services:
     volumes:
       - ./frontend/SE65-SENIOR-PROJECT:/app
       - /app/node_modules
-    command: npm run fe
+    command: npm run dev
+    
+  ts-code-runner:
+    build:
+      context: ./ts-code-runner
+    image: ts-code-runner
+    ports:
+      - "10600:3000"
+    volumes:
+      - ./ts-code-runner:/app
+      - /app/node_modules
+    command: node --loader ts-node/esm server.ts
