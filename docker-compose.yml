@@ -4,12 +4,12 @@ services:
       context: ./backend
     image: backend
     ports:
-      - "10600:5000"
+      - "10601:5000"
     volumes:
       - ./backend:/app
       - /app/node_modules
     env_file:
-      - .env
+      - ./backend/.env
     command: npm run dev
 
   frontend:
@@ -17,7 +17,7 @@ services:
       context: ./frontend/SE65-SENIOR-PROJECT
     image: frontend
     ports:
-      - "10600:5173"
+      - "10602:5173"
     volumes:
       - ./frontend/SE65-SENIOR-PROJECT:/app
       - /app/node_modules
@@ -28,8 +28,8 @@ services:
       context: ./ts-code-runner
     image: ts-code-runner
     ports:
-      - "10600:3000"
+      - "10603:3000"
     volumes:
       - ./ts-code-runner:/app
       - /app/node_modules
-    command: node --loader ts-node/esm server.ts
+    command: npm run dev
