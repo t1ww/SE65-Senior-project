@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   image: backend
+  #   ports:
+  #     - "10600:5000"
+  #   volumes:
+  #     - ./backend:/app
+  #     - /app/node_modules
+  #   env_file:
+  #     - .env
+  #   command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend/SE65-SENIOR-PROJECT
+    image: frontend
+    ports:
+      - "10600:5173"
+    volumes:
+      - ./frontend/SE65-SENIOR-PROJECT:/app
+      - /app/node_modules
+    command: npm run fe
