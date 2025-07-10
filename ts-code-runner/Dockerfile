@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3000
 
 # Start server using ts-node with esm loader
-CMD ["node", "--loader", "ts-node/esm", "server.ts"]
+CMD ["npm", "run", "dev"]
