@@ -1,7 +1,7 @@
 services:
   mysql:
     image: mysql:latest
-    container_name: mysql_container
+    container_name: code_practice_mysql_container
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root_password
@@ -17,7 +17,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:latest
-    container_name: phpmyadmin_container
+    container_name: code_practice_phpmyadmin_container
     restart: always
     environment:
       PMA_HOST: mysql

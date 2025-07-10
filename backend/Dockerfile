@@ -13,8 +13,8 @@ RUN npm install
 # Copy the rest of the source code
 COPY . .
 
-# Expose port (commonly 3000 or 8080 for Express)
-EXPOSE 3000
+# Expose port
+EXPOSE 5000
 
 # Start the server
 CMD ["npm", "start"]

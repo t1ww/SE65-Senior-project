@@ -9,10 +9,7 @@ const router = useRouter();
 
 const submitQuestion = async () => {
   try {
-    const response = await axios.post(
-      "http://localhost:5000/questions",
-      question
-    );
+    const response = await axios.post("/questions", question);
     console.log("Question posted successfully:", response.data);
     reset();                  // clear form after success
     router.push("/view-question-list");

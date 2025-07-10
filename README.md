@@ -11,8 +11,6 @@ Members:
 
 ---
 note: you can now `npm install` directly in root project folder
-<details>
-<summary>Starting and building Dockers <<<</summary>
 
 
 
@@ -23,11 +21,28 @@ note: you can now `npm install` directly in root project folder
 
       docker network create code-practice-app  # create shared network
 
-      docker compose -f docker-compose-db.yml up -d --build  # create docker for mysql and phpmyadmin to access
-      docker compose -f docker-compose-servers.yml up -d --build  # create docker for backend, frontend, and code-runner servers
-</details>
+      docker compose -f docker-compose-db.yml -f docker-compose-servers.yml -p code-practice up -d --build --remove-orphans
 
 ---
+
+
+
+
+
+
+## To solve port stuck when compose down
+
+Find it's port by runnning (ex. port=10602)
+
+      netstat -ano | findstr :10602
+
+You'll get something like so, last column is it's id
+
+      TCP    0.0.0.0:10602          0.0.0.0:0              LISTENING       65580
+
+Then kill it with found id
+
+      taskkill /pid 65580 /f
 
 
 

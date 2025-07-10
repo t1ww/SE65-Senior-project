@@ -8,14 +8,16 @@ import answerRoutes from "./routes/answers"
 dotenv.config();
 
 const app = express();
-const PORT = process.env.FRONTEND_PORT;
+const BACKEND_PORT = process.env.BACKEND_PORT;
 
-app.use(cors());
+app.use(cors({
+  origin: `http://localhost:${process.env.FRONTEND_PORT}`
+}));
 app.use(express.json()); // Parse JSON
 app.use("/users", userRoutes); // Mount user routes
 app.use("/questions", questionRoutes);
 app.use("/answers", answerRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+app.listen(BACKEND_PORT, () => {
+  console.log(`Server running at http://localhost:${BACKEND_PORT}`);
 });

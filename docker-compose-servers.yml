@@ -1,5 +1,6 @@
 services:
   backend:
+    container_name: code_practice_backend
     build:
       context: ./backend
     image: backend
@@ -15,6 +16,7 @@ services:
       - code-practice-app
 
   frontend:
+    container_name: code_practice_frontend
     build:
       context: ./frontend/SE65-SENIOR-PROJECT
     image: frontend
@@ -30,6 +32,7 @@ services:
       - code-practice-app
     
   ts-code-runner:
+    container_name: code_practice_ts_code_runner
     build:
       context: ./ts-code-runner
     image: ts-code-runner
