@@ -1,5 +1,6 @@
-# SE65-Senior-project
-CAMT SE65 `senior project` for my group
+# Code-practice-project
+~~CAMT SE65 `senior project` for my group~~
+clarification, this was a work project which is expanded to our senior projects (2 different groups)
 
 Members:
 
@@ -11,16 +12,29 @@ Members:
 ---
 note: you can now `npm install` directly in root project folder
 <details>
-<summary>Starting MySQL on Docker <<<</summary>
+<summary>Starting and building Dockers <<<</summary>
 
-## Call docker-compose
 
-      docker-compose up -d
 
-Everything has been setup in `docker-compose.yml`
+
+
+
+## To build the dockers
+
+      docker network create code-practice-app  # create shared network
+
+      docker compose -f docker-compose-db.yml up -d --build  # create docker for mysql and phpmyadmin to access
+      docker compose -f docker-compose-servers.yml up -d --build  # create docker for backend, frontend, and code-runner servers
 </details>
 
 ---
+
+
+
+
+
+
+## DEVELOPMENT
 
 ## You can now `npm run dev` in root folder1
 to run both front-end and back-end servers
@@ -62,6 +76,12 @@ or alternatively
 
 ---
 
+
+
+
+
+
+
 # How to migrate database
 Make sure you're in backend folder
 
@@ -81,6 +101,12 @@ Make sure you're in backend folder
 `npx knex migrate:latest`
 
 ---
+
+
+
+
+
+
 
 # Backend Explained
 
@@ -177,6 +203,12 @@ Make sure you're in backend folder
 </details>
 
 ---
+
+
+
+
+
+
 
 # ts-code-runner
 

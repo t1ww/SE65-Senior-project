@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, inject } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { getUserData, isAuthenticated } from "@/stores/auth";
@@ -18,6 +18,9 @@ const submitting = ref(false);
 const submissionMessage = ref("");
 const submissionError = ref("");
 const resultOutput = ref<string | null>(null);
+
+// Inject
+const coderunnerBase = inject('coderunnerBase') as string
 
 // Fetch question from API
 const fetchQuestion = async () => {
@@ -79,11 +82,11 @@ const submitAnswer = async () => {
   console.log(question.value.testCases);
   // Sending request
   try {
-    const res = await axios.post("http://localhost:3000/run", payload, {
+    const res = await axios.post(`${coderunnerBase}/run`, payload, {
       headers: {
         Authorization: `Bearer ${userData.token}`,
       },
-    });
+    })
 
     // Access returned response
     const result = res.data;

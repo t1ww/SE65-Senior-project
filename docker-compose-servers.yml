@@ -11,6 +11,8 @@ services:
     env_file:
       - ./backend/.env
     command: npm run dev
+    networks:
+      - code-practice-app
 
   frontend:
     build:
@@ -21,7 +23,11 @@ services:
     volumes:
       - ./frontend/SE65-SENIOR-PROJECT:/app
       - /app/node_modules
+    env_file:
+      - ./frontend/SE65-SENIOR-PROJECT/.env
     command: npm run dev
+    networks:
+      - code-practice-app
     
   ts-code-runner:
     build:
@@ -33,3 +39,9 @@ services:
       - ./ts-code-runner:/app
       - /app/node_modules
     command: npm run dev
+    networks:
+      - code-practice-app
+
+networks:
+  code-practice-app:
+    external: true

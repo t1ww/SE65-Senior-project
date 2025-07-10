@@ -9,7 +9,7 @@ import axios from 'axios'
 import { isAuthenticated, getUserData } from '@/stores/auth'
 
 // Set Axios base URL
-axios.defaults.baseURL = 'http://localhost:5000'
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE
 
 const app = createApp(App)
 
@@ -20,4 +20,5 @@ app.provide('getUserData', getUserData)
 app.use(createPinia())
     .use(router)
     .provide('axios', axios)
+    .provide('coderunnerBase', import.meta.env.VITE_CODERUNNER_BASE)
     .mount('#app')

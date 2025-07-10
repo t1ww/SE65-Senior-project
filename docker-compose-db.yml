@@ -11,9 +11,11 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: user_password
     ports:
-      - "3308:3306"
+      - "10604:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - code-practice-app
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -24,9 +26,15 @@ services:
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: root_password
     ports:
-      - "8083:80"
+      - "10605:80"
     depends_on:
       - mysql
+    networks:
+      - code-practice-app
 
 volumes:
   mysql_data:
+
+networks:
+  code-practice-app:
+    external: true
