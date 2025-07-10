@@ -41,6 +41,8 @@ services:
     volumes:
       - ./ts-code-runner:/app
       - /app/node_modules
+    env_file:
+      - ./ts-code-runner/.env
     command: npm run dev
     networks:
       - code-practice-app
