@@ -225,7 +225,7 @@ Make sure you're in backend folder
 
 
 
-# ts-code-runner
+# coderunner
 
 IDK Why, but I've tried to setup env for this but it broke when built onto docker.
 

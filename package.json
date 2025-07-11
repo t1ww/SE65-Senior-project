@@ -7,16 +7,16 @@
   "workspaces": [
     "backend",
     "frontend/SE65-SENIOR-PROJECT",
-    "ts-code-runner"
+    "coderunner"
   ],
   "scripts": {
     "be": "npm run dev --prefix backend",
     "fe": "npm run dev --prefix frontend/SE65-SENIOR-PROJECT",
     "backend": "npm run be",
     "frontend": "npm run fe",
-    "ts-code-runner": "npm run dev --prefix ts-code-runner",
+    "coderunner": "npm run dev --prefix coderunner",
     "dev": "start \"Backend Server\" cmd /k \"npm run be\" && start \"Frontend Server\" cmd /k \"npm run fe\"",
-    "all": "start \"Backend Server\" cmd /k \"npm run be\" && start \"Frontend Server\" cmd /k \"npm run fe\" && start \"TS Runner\" cmd /k \"npm run ts-code-runner\"",
+    "all": "start \"Backend Server\" cmd /k \"npm run be\" && start \"Frontend Server\" cmd /k \"npm run fe\" && start \"TS Runner\" cmd /k \"npm run coderunner\"",
     "stop": "taskkill /F /FI \"WindowTitle eq Backend Server\" /T && taskkill /F /FI \"WindowTitle eq Frontend Server\" /T && taskkill /F /FI \"WindowTitle eq TS Runner\" /T"
   },
   "repository": {

@@ -31,18 +31,18 @@ services:
     networks:
       - code-practice-app
     
-  ts-code-runner:
-    container_name: code_practice_ts_code_runner
+  coderunner:
+    container_name: code_practice_coderunner
     build:
-      context: ./ts-code-runner
-    image: ts-code-runner
+      context: ./coderunner
+    image: coderunner
     ports:
       - "10603:3000"
     volumes:
-      - ./ts-code-runner:/app
+      - ./coderunner:/app
       - /app/node_modules
     env_file:
-      - ./ts-code-runner/.env
+      - ./coderunner/.env
     command: npm run dev
     networks:
       - code-practice-app
