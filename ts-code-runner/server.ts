@@ -1,43 +1,20 @@
-process.on('uncaughtException', (err) => {
-    console.error('Uncaught Exception:', err);
-});
-process.on('unhandledRejection', (reason) => {
-    console.error('Unhandled Rejection:', reason);
-});
-
-
-import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import express from "express";
 import fs from "fs-extra";
 import path from "path";
 import { exec, spawn } from "child_process";
-import { fileURLToPath } from "url";
 
-dotenv.config();
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
 const app = express();
-
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN;
-if (!process.env.FRONTEND_ORIGIN) {
-    throw new Error("FRONTEND_ORIGIN environment variable is required");
-}
-
-const BACKEND_PORT = Number(process.env.BACKEND_PORT);
-if (!process.env.BACKEND_PORT) {
-    throw new Error("BACKEND_PORT environment variable is required");
-}
-if (isNaN(BACKEND_PORT)) {
-    throw new Error("BACKEND_PORT must be a valid number");
-}
-
 app.use(express.json());
 app.use(cors({
-    origin: FRONTEND_ORIGIN,
-    credentials: true,
+    origin: "http://localhost:10602", // frontend port
+    credentials: true
 }));
 
 const TEMP_DIR = path.join(__dirname, "temp");
@@ -55,8 +32,10 @@ app.post("/run", async (req, res): Promise<any> => {
     const exeFilePath = path.join(TEMP_DIR, fileName);
 
     try {
+        // Save C++ code to file
         await fs.writeFile(cppFilePath, code);
 
+        // Compile the C++ code
         await new Promise((resolve, reject) => {
             exec(`g++ "${cppFilePath}" -o "${exeFilePath}"`, (err, stdout, stderr) => {
                 if (err) return reject(stderr || err.message);
@@ -88,6 +67,7 @@ app.post("/run", async (req, res): Promise<any> => {
                         });
                     });
 
+                    // Write input to the child process via stdin
                     if (child.stdin) {
                         child.stdin.write(input);
                         child.stdin.end();
@@ -101,11 +81,10 @@ app.post("/run", async (req, res): Promise<any> => {
     } catch (error: unknown) {
         res.status(500).json({ error: (error as Error).toString() });
     } finally {
-        fs.remove(cppFilePath).catch(() => { });
-        fs.remove(exeFilePath).catch(() => { });
+        // Cleanup
+        fs.remove(cppFilePath).catch(() => {});
+        fs.remove(exeFilePath).catch(() => {});
     }
 });
 
-app.listen(BACKEND_PORT, "0.0.0.0", () => {
-    console.log(`Server running at http://localhost:${BACKEND_PORT}`);
-});
+app.listen(3000, () => console.log("Server running on port 3000"));
