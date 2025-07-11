@@ -227,6 +227,8 @@ Make sure you're in backend folder
 
 # ts-code-runner
 
+IDK Why, but I've tried to setup env for this but it broke when built onto docker.
+
 ### Make sure you have
 - **Node.js** v20.x (or later) and **npm**
 - **g++** (GNU C++ compiler)

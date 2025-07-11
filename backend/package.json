@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "db:migrate": "npx knex migrate:latest",
+    "db:rollback": "npx knex migrate:rollback --all"
   },
   "keywords": [],
   "author": "",
