@@ -25,6 +25,7 @@ if (!process.env.BACKEND_PORT) {
 if (isNaN(BACKEND_PORT)) {
     throw new Error("BACKEND_PORT must be a valid number");
 }
+
 app.use(express.json());
 app.use(cors({
     origin: FRONTEND_ORIGIN,
