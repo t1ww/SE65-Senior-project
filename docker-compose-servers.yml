@@ -1,18 +1,20 @@
 services:
   backend:
     container_name: code_practice_backend
-    build:
-      context: ./backend
-    image: backend
+    build: # remove
+      context: ./backend 
+    image: name/nginx:latest # example
     ports:
       - "10601:5000"
-    volumes:
+    volumes: # name to myapp
       - ./backend:/app
       - /app/node_modules
-    env_file:
+    env_file: # remove this
       - ./backend/.env
+    environment: # use this
+      - DEBUG=true
     command: npm run dev
-    networks:
+    networks: # remove
       - code-practice-app
 
   frontend:

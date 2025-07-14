@@ -1,0 +1,29 @@
+services:
+  backend:
+    container_name: code_practice_backend
+    image: t1ww/code-practice-backend-dev:latest # use image from dockerhub
+    depends_on:
+      - mysql
+    ports:
+      - "10680:5000" # 10600-10699
+    volumes:
+      - backend_volume:/app
+    environment:
+      - DEBUG=true
+    command: npm run dev
+    # healthcheck
+
+  frontend:
+    container_name: code_practice_frontend
+    image: t1ww/code-practice-frontend-dev:latest
+    depends_on:
+      - backend
+    ports:
+      - "10602:5173"
+    volumes:
+      - frontend_volume:/app
+    command: npm run dev
+
+volumes:
+  backend_volume:
+  frontend_volume:

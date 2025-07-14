@@ -1,0 +1,60 @@
+services:
+  backend:
+    container_name: code_practice_backend
+    image: name/nginx:latest # use image from dockerhub
+    depends_on:
+      - mysql
+    ports:
+      - "10680:5000" # 10600-10699
+    volumes:
+      - backend_volume:/app
+    environment:
+      - DEBUG=true
+    command: npm run dev
+    # healthcheck
+
+  frontend:
+    container_name: code_practice_frontend
+    image: frontend
+    depends_on:
+      - backend
+    ports:
+      - "10602:5173"
+    volumes:
+      - frontend_volume:/app
+    command: npm run dev
+
+  mysql:
+    image: mysql:latest
+    container_name: code_practice_mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "10604:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - code-practice-app
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: code_practice_phpmyadmin_container
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "10605:80"
+    depends_on:
+      - mysql
+    networks:
+      - code-practice-app
+
+volumes:
+  backend_volume:
+  frontend_volume:
