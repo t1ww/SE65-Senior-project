@@ -14,8 +14,8 @@ import Lecture from "@/pages/Lecture.vue";
 import TestCase from "@/pages/lecture/create_question/TestCase.vue";
 import Review from "@/pages/lecture/Review.vue";
 import ViewTest from "@/pages/ViewTest.vue";
-import EditQuestion from "@/pages/lecture/EditQuestion.vue";
-import EditTestCase from "@/pages/lecture/EditTestCase.vue";
+import EditQuestion from "@/pages/lecture/edit_question/EditQuestion.vue";
+import EditTestCase from "@/pages/lecture/edit_question/EditTestCase.vue";
 import ViewStudentsList from "./pages/lecture/ViewStudentsList.vue";
 
 /**
