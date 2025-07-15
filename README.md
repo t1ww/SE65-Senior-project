@@ -23,6 +23,10 @@ note: you can now `npm install` directly in root project folder
 
       docker compose -f docker-compose-db.yml -f docker-compose-servers.yml -p code-practice up -d --build --remove-orphans
 
+# Pushing
+
+      docker push t1ww/code-practice-backend-dev:latest
+      docker push t1ww/code-practice-frontend-dev:latest
 ---
 
 
