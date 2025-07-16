@@ -12,6 +12,32 @@ Members:
 ---
 note: you can now `npm install` directly in root project folder
 
+---
+
+
+
+
+
+
+
+
+## To solve server stuck
+
+Find it's port by runnning (ex. port=10602)
+
+      netstat -ano | findstr :10602
+
+You'll get something like so, last column is it's id
+
+      TCP    0.0.0.0:10602          0.0.0.0:0              LISTENING       65580
+
+Then kill it with found id
+
+      taskkill /pid 65580 /f
+
+---
+
+
 
 
 
@@ -31,22 +57,6 @@ note: you can now `npm install` directly in root project folder
 
 
 
-
-
-
-## To solve port stuck when compose down
-
-Find it's port by runnning (ex. port=10602)
-
-      netstat -ano | findstr :10602
-
-You'll get something like so, last column is it's id
-
-      TCP    0.0.0.0:10602          0.0.0.0:0              LISTENING       65580
-
-Then kill it with found id
-
-      taskkill /pid 65580 /f
 
 
 
