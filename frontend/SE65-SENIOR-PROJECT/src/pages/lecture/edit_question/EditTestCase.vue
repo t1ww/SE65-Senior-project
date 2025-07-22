@@ -1,90 +1,107 @@
+<!-- src/pages/lecture/EditTestCase.vue -->
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed } from "vue";
+import { useQuestionStore } from "@/stores/questionStore";
+
+const { question } = useQuestionStore();
 
 const itemsPerPage = 2;
+const currentPage = ref(0);
 
-// Load test cases from local storage or initialize
-const loadTestCases = () => {
-  const storedTestCases = localStorage.getItem("testCases");
-  if (storedTestCases) {
-    const parsed = JSON.parse(storedTestCases);
-    return parsed.length > 0 ? parsed : [{ input: "", output: "", correctCode: "" }];
-  }
-  return [{ input: "", output: "", correctCode: "" }];
-};
-
-const saveTestCases = () => {
-  localStorage.setItem("testCases", JSON.stringify(questionData.value.testCases));
-};
-
-const loadCurrentPage = () => {
-  const storedPage = localStorage.getItem("currentPage");
-  return storedPage ? JSON.parse(storedPage) : 0;
-};
-
-const saveCurrentPage = () => {
-  localStorage.setItem("currentPage", JSON.stringify(currentPage.value));
-};
-
-const questionData = ref({
-  testCases: loadTestCases(),
-});
-
-const currentPage = ref(loadCurrentPage());
-
-const paginatedTestCases = computed(() => {
+const paginated = computed(() => {
   const start = currentPage.value * itemsPerPage;
-  const end = start + itemsPerPage;
-  return questionData.value.testCases.slice(start, end);
+  return question.testCases.slice(start, start + itemsPerPage);
 });
 
-const nextPage = () => {
-  if ((currentPage.value + 1) * itemsPerPage < questionData.value.testCases.length) {
+function nextPage() {
+  if ((currentPage.value + 1) * itemsPerPage < question.testCases.length) {
     currentPage.value++;
-    saveCurrentPage();
   }
-};
+}
 
-const prevPage = () => {
+function prevPage() {
   if (currentPage.value > 0) {
     currentPage.value--;
-    saveCurrentPage();
   }
-};
+}
 
-const addTestCase = () => {
-  questionData.value.testCases.push({ input: "", output: "", correctCode: "" });
-  saveTestCases();
-
-  if (questionData.value.testCases.length > (currentPage.value + 1) * itemsPerPage) {
+function addTestCase() {
+  question.testCases.push({ input: "", expectedOutput: "" });
+  if (question.testCases.length > (currentPage.value + 1) * itemsPerPage) {
     currentPage.value++;
-    saveCurrentPage();
   }
-};
+}
 
-const deleteTestCase = (index: number) => {
-  const actualIndex = currentPage.value * itemsPerPage + index;
-  questionData.value.testCases.splice(actualIndex, 1);
-  saveTestCases();
-
-  if (currentPage.value > 0 && paginatedTestCases.value.length === 0) {
+function deleteTestCase(idx: number) {
+  const realIndex = currentPage.value * itemsPerPage + idx;
+  question.testCases.splice(realIndex, 1);
+  if (currentPage.value > 0 && paginated.value.length === 0) {
     currentPage.value--;
-    saveCurrentPage();
   }
-};
+}
 
-watch(
-  () => questionData.value.testCases,
-  () => {
-    saveTestCases();
-  },
-  { deep: true }
-);
+// Upload test case files
+function handleTestCaseUpload(event: Event) {
+  const files = (event.target as HTMLInputElement).files;
+  if (!files) return;
 
-onMounted(() => {
-  questionData.value.testCases = loadTestCases();
-  currentPage.value = loadCurrentPage();
-});
+  const fileMap: Record<string, { input?: string; output?: string }> = {};
+
+  const fileReads = Array.from(files).map((file) => {
+    return new Promise<void>((resolve) => {
+      const match = file.name.match(/^(\d+)\.(in|sol)$/);
+      if (!match) return resolve();
+
+      const index = match[1];
+      const type = match[2];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = (reader.result as string).trim();
+        if (!fileMap[index]) fileMap[index] = {};
+        if (type === "in") fileMap[index].input = content;
+        else fileMap[index].output = content;
+        resolve();
+      };
+      reader.readAsText(file);
+    });
+  });
+
+  Promise.all(fileReads).then(() => {
+    const sortedKeys = Object.keys(fileMap).sort((a, b) => Number(a) - Number(b));
+    for (const key of sortedKeys) {
+      const idx = Number(key) - 1;
+      const data = fileMap[key];
+
+      if (question.testCases[idx]) {
+        if (data.input !== undefined) question.testCases[idx].input = data.input;
+        if (data.output !== undefined) question.testCases[idx].expectedOutput = data.output;
+      } else {
+        question.testCases[idx] = {
+          input: data.input || "",
+          expectedOutput: data.output || ""
+        };
+      }
+    }
+
+    currentPage.value = Math.floor((question.testCases.length - 1) / itemsPerPage);
+  });
+}
+
+function handleDrop(event: DragEvent) {
+  const files = event.dataTransfer?.files;
+  if (!files) return;
+
+  const input = document.getElementById("fileUpload") as HTMLInputElement;
+  const dataTransfer = new DataTransfer();
+
+  Array.from(files).forEach(file => {
+    dataTransfer.items.add(file);
+  });
+
+  input.files = dataTransfer.files;
+  handleTestCaseUpload({ target: input } as unknown as Event);
+}
 </script>
 
 <template>
@@ -94,14 +111,18 @@ onMounted(() => {
         <router-link to="/edit-question">⬅ Back to Edit Question</router-link>
       </div>
 
+      <h3>Correct Answer Code</h3>
+      <div class="test-case-item">
+        <div class="input-wrapper">
+          <label>Correct Answer Code:</label>
+          <textarea v-model="question.correctAnswerCode" placeholder="Enter correct answer code" />
+        </div>
+      </div>
+
       <h3>Edit Test Cases</h3>
 
       <div class="test-case-list">
-        <div
-          v-for="(testCase, index) in paginatedTestCases"
-          :key="index"
-          class="test-case-item"
-        >
+        <div v-for="(testCase, index) in paginated" :key="index" class="test-case-item">
           <div class="test-case-header">
             <strong>Test Case {{ currentPage * itemsPerPage + index + 1 }}</strong>
             <button @click="deleteTestCase(index)" class="delete-button">🗑 Delete</button>
@@ -113,18 +134,19 @@ onMounted(() => {
           </div>
 
           <div class="input-wrapper">
-            <label>Output:</label>
-            <input v-model="testCase.output" placeholder="Enter expected output" />
-          </div>
-
-          <div class="input-wrapper">
-            <label>Correct Answer Code:</label>
-            <textarea
-              v-model="testCase.correctCode"
-              placeholder="Enter correct answer code"
-            />
+            <label>Expected Output:</label>
+            <input v-model="testCase.expectedOutput" placeholder="Enter expected output" />
           </div>
         </div>
+      </div>
+
+      <div class="upload-dropzone" @dragover.prevent @dragenter.prevent @drop.prevent="handleDrop">
+        <label for="fileUpload" class="upload-label">
+          <div class="upload-icon">📂</div>
+          <div>Click or drag & drop .in/.sol files here</div>
+          <input id="fileUpload" type="file" @change="handleTestCaseUpload" multiple accept=".in,.sol"
+            style="display: none" />
+        </label>
       </div>
 
       <div class="add-button">
@@ -133,12 +155,7 @@ onMounted(() => {
 
       <div class="pagination">
         <button @click="prevPage" :disabled="currentPage === 0">⬅ Previous</button>
-        <button
-          @click="nextPage"
-          :disabled="(currentPage + 1) * itemsPerPage >= questionData.testCases.length"
-        >
-          Next ➡
-        </button>
+        <button @click="nextPage" :disabled="(currentPage + 1) * itemsPerPage >= question.testCases.length">Next ➡</button>
       </div>
     </div>
   </div>
@@ -183,12 +200,12 @@ h3 {
 .test-case-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .test-case-item {
   background-color: #ffe2c2;
   border: 2px solid #f57c00;
+  margin-top: 20px;
   padding: 20px;
   border-radius: 10px;
   display: flex;
@@ -210,7 +227,6 @@ h3 {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 500px;
   margin-top: 10px;
 }
 
@@ -268,5 +284,33 @@ button:disabled {
 
 .delete-button:hover {
   background-color: #cc0000;
+}
+
+.upload-dropzone {
+  border: 2px dashed #f57c00;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  margin: 20px 0;
+  background-color: #fff7f0;
+  color: #f57c00;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.upload-dropzone:hover {
+  background-color: #fff0e0;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.upload-icon {
+  font-size: 30px;
 }
 </style>

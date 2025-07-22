@@ -313,5 +313,4 @@ button:disabled {
 .upload-icon {
   font-size: 30px;
 }
-
 </style>

@@ -65,6 +65,7 @@ const submitQuestion = async () => {
 h2 {
   color: #ff9233;
 }
+
 a {
   color: #ff9233;
   text-decoration: underline;
@@ -80,6 +81,7 @@ a {
   gap: 10px;
   text-align: center;
 }
+
 label {
   font-weight: bold;
 }
@@ -92,6 +94,7 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 input {
   width: 100%;
   padding: 10px;
@@ -101,6 +104,7 @@ input {
   font-size: 14px;
   color: black;
 }
+
 button {
   background-color: #f57c00;
   color: white;
@@ -109,16 +113,21 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+
 button:hover {
   background-color: #0056b3;
 }
+
 .input-group {
   margin-bottom: 15px;
   text-align: left;
 }
+
 textarea {
   width: 100%;
-  height: 100px; /* Set fixed height */
-  resize: none; /* Prevent resizing */
+  height: 100px;
+  /* Set fixed height */
+  resize: none;
+  /* Prevent resizing */
 }
 </style>

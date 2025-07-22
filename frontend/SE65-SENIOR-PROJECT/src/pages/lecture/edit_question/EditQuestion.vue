@@ -38,28 +38,38 @@ const submitQuestion = async () => {
     <h2>Edit Question</h2>
     <form @submit.prevent="submitQuestion">
       <div class="input-group">
-        <label for="name">Name:</label>
+        <label>Name:</label>
         <input v-model="question.questionName" type="text" required />
       </div>
 
       <div class="input-group">
-        <label for="description">Description:</label>
+        <label>Description:</label>
         <input v-model="question.questionDescription" required />
       </div>
 
       <div class="input-group">
-        <label for="hint">Hint:</label>
-        <input v-model="question.hint" required />
+        <label>Hint:</label>
+        <input v-model="question.hint" />
       </div>
 
       <div class="input-group">
-        <label for="estimatedRuntime">Estimated Runtime:</label>
-        <input v-model="question.estimatedRuntime" required />
+        <label>Example Input:</label>
+        <input v-model="question.exampleInput" />
       </div>
 
       <div class="input-group">
-        <label for="timeComplexity">Time Complexity:</label>
-        <input v-model="question.timeComplexity" required />
+        <label>Example Output:</label>
+        <input v-model="question.exampleOutput" />
+      </div>
+
+      <div class="input-group">
+        <label>Estimated Runtime:</label>
+        <input v-model="question.estimatedRuntime" />
+      </div>
+
+      <div class="input-group">
+        <label>Time Complexity:</label>
+        <input v-model="question.timeComplexity" />
       </div>
 
       <div class="input-group">
@@ -76,10 +86,16 @@ h2 {
   color: #ff9233;
 }
 
+a {
+  color: #ff9233;
+  text-decoration: underline;
+}
+
 .container {
   max-width: 600px;
   margin: auto;
   padding: 20px;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 10px;
