@@ -12,8 +12,10 @@ router.get("/", async (req: Request, res: Response): Promise<any> => {
 
     res.json(rows);
   } catch (err) {
-    res.status(500).json({ error: "Database error" });
+    console.error("GET / error:", err);
+    res.status(500).json({ error: "Database error", details: (err as any).message });
   }
+
 });
 
 // Get a question by id including its test cases
@@ -35,7 +37,8 @@ router.get("/:id", async (req: Request, res: Response): Promise<any> => {
     );
     res.json({ ...question, testCases });
   } catch (err) {
-    res.status(500).json({ error: "Database error" });
+    console.error("GET /:id error:", err);
+    res.status(500).json({ error: "Database error", details: (err as any).message });
   }
 });
 
