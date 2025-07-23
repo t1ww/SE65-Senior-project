@@ -6,8 +6,8 @@ import QuestionCard from "@/components/QuestionCard.vue";
 
 const questions = ref<{
   id: number;
-  questionName: string,
-  questionDescription: string
+  name: string,
+  description: string
 }[]>([]);
 const loading = ref(false);
 const error = ref("");
