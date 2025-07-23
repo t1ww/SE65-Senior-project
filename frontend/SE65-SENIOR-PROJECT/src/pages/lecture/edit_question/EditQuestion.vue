@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, onMounted, computed } from "vue";
+import { onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import { useQuestionStore } from "@/stores/questionStore";

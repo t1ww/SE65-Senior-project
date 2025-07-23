@@ -32,7 +32,7 @@ onMounted(async () => {
       <p><strong>Example Output:</strong> {{ question.exampleOutput }}</p>
 
       <div class="links">
-        <router-link :to="`/view-test/${question.id}`" class="link">View Test Case</router-link>
+        <div></div>
         <router-link :to="`/edit-question/${question.id}`" class="link with-icon">
           <span class="icon">📝</span> Edit Question
         </router-link>
