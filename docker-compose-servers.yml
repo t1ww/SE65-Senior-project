@@ -10,7 +10,7 @@ services:
       - ./backend:/app
       - /app/node_modules
     env_file: # remove this
-      - ./backend/.env
+      - ./backend/.env.docker
     environment: # use this
       - DEBUG=true
     command: npm run dev
@@ -28,7 +28,7 @@ services:
       - ./frontend/SE65-SENIOR-PROJECT:/app
       - /app/node_modules
     env_file:
-      - ./frontend/SE65-SENIOR-PROJECT/.env
+      - ./frontend/SE65-SENIOR-PROJECT/.env.docker
     command: npm run dev
     networks:
       - code-practice-app
@@ -43,8 +43,6 @@ services:
     volumes:
       - ./coderunner:/app
       - /app/node_modules
-    env_file:
-      - ./coderunner/.env
     command: npm run dev
     networks:
       - code-practice-app
