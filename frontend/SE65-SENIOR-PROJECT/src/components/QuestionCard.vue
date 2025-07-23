@@ -2,16 +2,16 @@
 defineProps<{
     questionData: {
         id: number; 
-        questionName: string;
-        questionDescription: string;
+        name: string;
+        description: string;
     }
 }>();
 </script>
 
 <template>
     <div class="question-card">
-        <h3>{{ questionData.questionName }}</h3>
-        <p>{{ questionData.questionDescription }}</p>
+        <h3>{{ questionData.name }}</h3>
+        <p>{{ questionData.description }}</p>
     </div>
 </template>
 

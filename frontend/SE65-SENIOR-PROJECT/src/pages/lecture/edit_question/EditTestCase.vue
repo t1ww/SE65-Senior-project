@@ -1,20 +1,23 @@
 <!-- src/pages/lecture/EditTestCase.vue -->
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useQuestionStore } from "@/stores/questionStore";
+import { useRoute } from "vue-router";
+import axios from "axios";
 
-const { question } = useQuestionStore();
+const questionStore = useQuestionStore();
+const route = useRoute();
 
 const itemsPerPage = 2;
 const currentPage = ref(0);
 
 const paginated = computed(() => {
   const start = currentPage.value * itemsPerPage;
-  return question.testCases.slice(start, start + itemsPerPage);
+  return questionStore.question.testCases.slice(start, start + itemsPerPage);
 });
 
 function nextPage() {
-  if ((currentPage.value + 1) * itemsPerPage < question.testCases.length) {
+  if ((currentPage.value + 1) * itemsPerPage < questionStore.question.testCases.length) {
     currentPage.value++;
   }
 }
@@ -26,15 +29,15 @@ function prevPage() {
 }
 
 function addTestCase() {
-  question.testCases.push({ input: "", expectedOutput: "" });
-  if (question.testCases.length > (currentPage.value + 1) * itemsPerPage) {
+  questionStore.question.testCases.push({ input: "", expectedOutput: "" });
+  if (questionStore.question.testCases.length > (currentPage.value + 1) * itemsPerPage) {
     currentPage.value++;
   }
 }
 
 function deleteTestCase(idx: number) {
   const realIndex = currentPage.value * itemsPerPage + idx;
-  question.testCases.splice(realIndex, 1);
+  questionStore.question.testCases.splice(realIndex, 1);
   if (currentPage.value > 0 && paginated.value.length === 0) {
     currentPage.value--;
   }
@@ -73,18 +76,18 @@ function handleTestCaseUpload(event: Event) {
       const idx = Number(key) - 1;
       const data = fileMap[key];
 
-      if (question.testCases[idx]) {
-        if (data.input !== undefined) question.testCases[idx].input = data.input;
-        if (data.output !== undefined) question.testCases[idx].expectedOutput = data.output;
+      if (questionStore.question.testCases[idx]) {
+        if (data.input !== undefined) questionStore.question.testCases[idx].input = data.input;
+        if (data.output !== undefined) questionStore.question.testCases[idx].expectedOutput = data.output;
       } else {
-        question.testCases[idx] = {
+        questionStore.question.testCases[idx] = {
           input: data.input || "",
           expectedOutput: data.output || ""
         };
       }
     }
 
-    currentPage.value = Math.floor((question.testCases.length - 1) / itemsPerPage);
+    currentPage.value = Math.floor((questionStore.question.testCases.length - 1) / itemsPerPage);
   });
 }
 
@@ -102,20 +105,34 @@ function handleDrop(event: DragEvent) {
   input.files = dataTransfer.files;
   handleTestCaseUpload({ target: input } as unknown as Event);
 }
+
+onMounted(async () => {
+  if (!questionStore.question.id) { // load only if not loaded
+    const id = route.params.id;
+    if (id) {
+      try {
+        const response = await axios.get(`http://localhost:10601/questions/${id}`);
+        questionStore.question = response.data;
+      } catch (error) {
+        console.error("Failed to fetch question:", error);
+      }
+    }
+  }
+});
 </script>
 
 <template>
   <div class="container">
     <div class="content-box">
       <div class="back-button">
-        <router-link to="/edit-question">⬅ Back to Edit Question</router-link>
+        <router-link :to="`/edit-question/${questionStore.question.id}`">⬅ Back to Edit Question</router-link>
       </div>
 
       <h3>Correct Answer Code</h3>
       <div class="test-case-item">
-        <div class="input-wrapper">
+        <div class="input-wrapper correct-answer-code">
           <label>Correct Answer Code:</label>
-          <textarea v-model="question.correctAnswerCode" placeholder="Enter correct answer code" />
+          <textarea v-model="questionStore.question.correctAnswerCode" placeholder="Enter correct answer code" />
         </div>
       </div>
 
@@ -155,7 +172,7 @@ function handleDrop(event: DragEvent) {
 
       <div class="pagination">
         <button @click="prevPage" :disabled="currentPage === 0">⬅ Previous</button>
-        <button @click="nextPage" :disabled="(currentPage + 1) * itemsPerPage >= question.testCases.length">Next ➡</button>
+        <button @click="nextPage" :disabled="(currentPage + 1) * itemsPerPage >= questionStore.question.testCases.length">Next ➡</button>
       </div>
     </div>
   </div>
@@ -221,6 +238,10 @@ h3 {
   font-weight: bold;
   margin-bottom: 15px;
   color: #333;
+}
+
+.correct-answer-code textarea{
+  height: 16rem;
 }
 
 .input-wrapper {
