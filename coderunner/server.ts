@@ -80,10 +80,17 @@ app.post("/run", async (req, res): Promise<any> => {
     } catch (error: unknown) {
         res.status(500).json({ error: (error as Error).toString() });
     } finally {
-        // Cleanup
-        fs.remove(cppFilePath).catch(() => {});
-        fs.remove(exeFilePath).catch(() => {});
+        setTimeout(() => {
+            fs.remove(cppFilePath)
+                .then(() => console.log("Deleted cpp:", cppFilePath))
+                .catch((err) => console.error("Failed to delete .cpp file:", err));
+
+            fs.remove(`${exeFilePath}.exe`)
+                .then(() => console.log("Deleted exe:", `${exeFilePath}.exe`))
+                .catch((err) => console.error("Failed to delete .exe file:", err));
+        }, 100); // Delay to ensure file isn't in use
     }
+
 });
 
 app.listen(3000, () => console.log("Server running on port 3000"));
