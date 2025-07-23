@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import { useQuestionStore } from "@/stores/questionStore";
@@ -20,25 +20,29 @@ interface Question {
   timeComplexity: string;
 }
 
-const question = reactive<Question>({
-  id: 0,
-  questionName: "",
-  questionDescription: "",
-  hint: "",
-  exampleInput: "",
-  exampleOutput: "",
-  startingCode: "",
-  correctAnswerCode: "",
-  testCases: [],
-  estimatedRuntime: "",
-  timeComplexity: "",
-});
+const question = computed(() => questionStore.question);
 
 const route = useRoute();
 
 const submitQuestion = async () => {
   try {
-    const response = await axios.put("http://localhost:10601/questions", question);
+    const rawQuestion: Question = {
+      id: questionStore.question.id,
+      questionName: questionStore.question.questionName,
+      questionDescription: questionStore.question.questionDescription,
+      hint: questionStore.question.hint,
+      exampleInput: questionStore.question.exampleInput,
+      exampleOutput: questionStore.question.exampleOutput,
+      startingCode: questionStore.question.startingCode,
+      correctAnswerCode: questionStore.question.correctAnswerCode,
+      testCases: [...questionStore.question.testCases],
+      estimatedRuntime: questionStore.question.estimatedRuntime,
+      timeComplexity: questionStore.question.timeComplexity,
+    };
+    const response = await axios.put(
+      `http://localhost:10601/questions/${question.value.id}`,
+      rawQuestion
+    );
     console.log("Question edited successfully:", response.data);
     return response.data;
   } catch (error: any) {
@@ -48,13 +52,14 @@ const submitQuestion = async () => {
 };
 
 onMounted(async () => {
-  const id = route.params.id;
-  try {
-    const response = await axios.get(`http://localhost:10601/questions/${id}`);
-    questionStore.question = response.data;
-    Object.assign(question, response.data);
-  } catch (error: any) {
-    console.error("Failed to fetch question:", error.response?.data || error.message);
+  const id = Number(route.params.id);
+  if (!questionStore.question.id || questionStore.question.id !== id) {
+    try {
+      const response = await axios.get(`http://localhost:10601/questions/${id}`);
+      questionStore.question = response.data;
+    } catch (error: any) {
+      console.error("Failed to fetch question:", error.response?.data || error.message);
+    }
   }
 });
 </script>
