@@ -86,7 +86,7 @@ const routes = [
   // Review and edit questions
   { name: "Review", path: "/review", component: Review, meta: { hidden: true } },
   { name: "ViewTest", path: "/view-test", component: ViewTest, meta: { hidden: true } },
-  { name: "EditQuestion", path: "/edit-question", component: EditQuestion, meta: { hidden: true } },
+  { name: "EditQuestion", path: "/edit-question/:id", component: EditQuestion, meta: { hidden: true } },
   { name: "EditTestCase", path: "/edit-test-case", component: EditTestCase, meta: { hidden: true } },
 ];
 

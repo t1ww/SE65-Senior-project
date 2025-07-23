@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { useRouter, type RouteLocationAsPathGeneric, type RouteLocationAsRelativeGeneric } from 'vue-router';
-const router = useRouter();
+import { useRouter } from 'vue-router';
+import { useQuestionStore } from '@/stores/questionStore';
 
-const navigateTo = (path: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric) => {
+const router = useRouter();
+const questionStore = useQuestionStore();
+
+const navigateTo = (path: string) => {
+  if (path === '/create-question') {
+    questionStore.reset();  // reset store when route to create page
+  }
   router.push(path);
 };
 </script>
+
 
 <template>
   <div class="container">

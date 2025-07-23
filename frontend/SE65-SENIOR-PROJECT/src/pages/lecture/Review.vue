@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-const questions = ref([]);
+interface Question {
+  id: number;
+  name: string;
+  description: string;
+  hint: string;
+  exampleInput: string;
+  exampleOutput: string;
+}
+const questions = ref<Question[]>([]);
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://localhost:5000/questions');
+    const res = await fetch('http://localhost:10601/questions');
     const data = await res.json();
     questions.value = data;
   } catch (err) {
@@ -34,14 +42,17 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.review-container {
-  text-align: center;
-  padding: 50px;
-}
-
 h2 {
   color: #f57c00;
   margin-bottom: 20px;
+}
+
+.review-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+  gap: 20px;
 }
 
 .review-box {
@@ -49,11 +60,10 @@ h2 {
   border-radius: 12px;
   padding: 25px;
   background-color: #fff;
-  display: inline-block;
-  min-width: 350px;
+  width: 100%;
+  max-width: 600px;
   text-align: left;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
 }
 
 .links {

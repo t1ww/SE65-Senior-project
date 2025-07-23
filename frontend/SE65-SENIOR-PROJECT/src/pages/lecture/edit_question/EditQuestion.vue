@@ -1,7 +1,24 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import type { Question } from "@/types/types";
+import { reactive, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import axios from "axios";
+import { useQuestionStore } from "@/stores/questionStore";
+
+const questionStore = useQuestionStore();
+
+interface Question {
+  id: number;
+  questionName: string;
+  questionDescription: string;
+  hint: string;
+  exampleInput: string;
+  exampleOutput: string;
+  startingCode: string;
+  correctAnswerCode: string;
+  testCases: any[];
+  estimatedRuntime: string;
+  timeComplexity: string;
+}
 
 const question = reactive<Question>({
   id: 0,
@@ -17,16 +34,29 @@ const question = reactive<Question>({
   timeComplexity: "",
 });
 
+const route = useRoute();
+
 const submitQuestion = async () => {
   try {
-    const response = await axios.post("http://localhost:5000/questions", question);
-    console.log("Question posted successfully:", response.data);
+    const response = await axios.put("http://localhost:10601/questions", question);
+    console.log("Question edited successfully:", response.data);
     return response.data;
   } catch (error: any) {
-    console.error("Error posting question:", error.response?.data || error.message);
+    console.error("Error editing question:", error.response?.data || error.message);
     throw error;
   }
 };
+
+onMounted(async () => {
+  const id = route.params.id;
+  try {
+    const response = await axios.get(`http://localhost:10601/questions/${id}`);
+    questionStore.question = response.data;
+    Object.assign(question, response.data);
+  } catch (error: any) {
+    console.error("Failed to fetch question:", error.response?.data || error.message);
+  }
+});
 </script>
 
 <template>
