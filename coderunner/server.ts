@@ -85,8 +85,9 @@ app.post("/run", async (req, res): Promise<any> => {
                 .then(() => console.log("Deleted cpp:", cppFilePath))
                 .catch((err) => console.error("Failed to delete .cpp file:", err));
 
-            fs.remove(`${exeFilePath}.exe`)
-                .then(() => console.log("Deleted exe:", `${exeFilePath}.exe`))
+            let exeFilePathFixed = `${exeFilePath}.exe`;
+            fs.remove(exeFilePathFixed)
+                .then(() => console.log("Deleted exe:", exeFilePathFixed))
                 .catch((err) => console.error("Failed to delete .exe file:", err));
         }, 100); // Delay to ensure file isn't in use
     }
