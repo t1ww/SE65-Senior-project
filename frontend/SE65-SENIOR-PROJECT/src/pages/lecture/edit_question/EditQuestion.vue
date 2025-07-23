@@ -39,10 +39,7 @@ const submitQuestion = async () => {
       estimatedRuntime: questionStore.question.estimatedRuntime,
       timeComplexity: questionStore.question.timeComplexity,
     };
-    const response = await axios.put(
-      `http://localhost:10601/questions/${question.value.id}`,
-      rawQuestion
-    );
+    const response = await axios.put(`/questions/${question.value.id}`, rawQuestion);
     console.log("Question edited successfully:", response.data);
     return response.data;
   } catch (error: any) {

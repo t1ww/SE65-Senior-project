@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
 interface Question {
@@ -13,9 +14,8 @@ const questions = ref<Question[]>([]);
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://localhost:10601/questions');
-    const data = await res.json();
-    questions.value = data;
+    const response = await axios.get("/questions");
+    questions.value = response.data;
   } catch (err) {
     console.error('Failed to fetch questions:', err);
   }
