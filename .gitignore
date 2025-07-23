@@ -19,3 +19,4 @@ logs/
 log/
 ts-code-runner/server.js
 /ts-code-runner/temp
+*.env.docker

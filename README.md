@@ -241,7 +241,11 @@ Make sure you're in backend folder
 
 # coderunner
 
-IDK Why, but I've tried to setup env for this but it broke when built onto docker.
+~~IDK Why, but I've tried to setup env for this but it broke when built onto docker.~~
+
+~~I've set it up again...~~
+
+Just a reminder, yep, doesn't work, don't do it again, this is staying in dev branch.
 
 ### Make sure you have
 - **Node.js** v20.x (or later) and **npm**
