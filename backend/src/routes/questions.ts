@@ -7,7 +7,7 @@ const router = Router();
 router.get("/", async (req: Request, res: Response): Promise<any> => {
   try {
     const [rows] = await pool.query(
-      "SELECT id, questionName, questionDescription FROM questions"
+      `SELECT id, questionName AS name, questionDescription AS description, hint, exampleInput, exampleOutput FROM questions`
     );
 
     res.json(rows);
