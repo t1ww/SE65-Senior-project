@@ -1,5 +1,4 @@
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
 import fs from "fs-extra";
 import path from "path";
@@ -10,14 +9,10 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config();
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN;
-const CODERUNNER_PORT = process.env.CODERUNNER_PORT;
-
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: FRONTEND_ORIGIN, // frontend port
+    origin: "http://localhost:5173", // frontend port
     credentials: true
 }));
 
@@ -90,13 +85,12 @@ app.post("/run", async (req, res): Promise<any> => {
                 .then(() => console.log("Deleted cpp:", cppFilePath))
                 .catch((err) => console.error("Failed to delete .cpp file:", err));
 
-            let exeFilePathFixed = `${exeFilePath}.exe`;
-            fs.remove(exeFilePathFixed)
-                .then(() => console.log("Deleted exe:", exeFilePathFixed))
+            fs.remove(`${exeFilePath}.exe`)
+                .then(() => console.log("Deleted exe:", `${exeFilePath}.exe`))
                 .catch((err) => console.error("Failed to delete .exe file:", err));
         }, 100); // Delay to ensure file isn't in use
     }
 
 });
 
-app.listen(CODERUNNER_PORT, () => console.log(`Server running on port ${CODERUNNER_PORT}`));
+app.listen(3000, () => console.log("Server running on port 3000"));
