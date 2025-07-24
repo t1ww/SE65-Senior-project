@@ -44,6 +44,20 @@ Then kill it with found id
 
       docker compose -f docker-compose-db.yml -p code-practice-dev up -d
 
+## Then migrate the db schema
+
+      npm run db:migrate
+
+## You can use this to rollback schema
+
+      npm run db:rollback
+
+---
+
+
+
+
+
 
 ## To build the dockers
 

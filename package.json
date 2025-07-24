@@ -12,6 +12,7 @@
   "scripts": {
     "be": "npm run dev --prefix backend",
     "db:migrate": "npm run db:migrate --prefix backend",
+    "db:rollback": "npm run db:rollback --prefix backend",
     "fe": "npm run dev --prefix frontend/SE65-SENIOR-PROJECT",
     "backend": "npm run be",
     "frontend": "npm run fe",
