@@ -47,7 +47,7 @@ const handleRegister = async () => {
       <h2 class="form-title">Upload student</h2>
       <div v-if="success" class="success-box">
         <p>Upload successful!  
-          <router-link to="ViewStudents" class="view-link">View student list →</router-link>
+          <router-link to="/view-students" class="view-link">View student list →</router-link>
         </p>
       </div>
 

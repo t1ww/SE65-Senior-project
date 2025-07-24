@@ -62,6 +62,7 @@ const routes = [
     name: "CreateQuestion",
     path: "/create-question",
     component: CreateQuestion,
+    meta: { hidden: true },
   },
   {
     name: "TestCase",
