@@ -52,7 +52,7 @@ onMounted(async () => {
   const id = Number(route.params.id);
   if (!questionStore.question.id || questionStore.question.id !== id) {
     try {
-      const response = await axios.get(`http://localhost:10601/questions/${id}`);
+      const response = await axios.get(`/questions/${id}`);
       questionStore.question = response.data;
     } catch (error: any) {
       console.error("Failed to fetch question:", error.response?.data || error.message);
