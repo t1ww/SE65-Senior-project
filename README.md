@@ -42,7 +42,7 @@ Then kill it with found id
 
 ## To run just db docker
 
-      docker compose docker-compose-db.yml -p code-practice-dev up -d
+      docker compose -f docker-compose-db.yml -p code-practice-dev up -d
 
 
 ## To build the dockers
